@@ -11,6 +11,7 @@ Tests::Tests() {
 	test_dynamic_vector_push_back();
 	test_dynamic_vector_deletion();
 	test_recording_getters();
+	test_recording_setters();
 }
 
 
@@ -80,5 +81,23 @@ void Tests::test_dynamic_vector_deletion() {
 
 void Tests::test_recording_getters() {
 	Recording recording("anomaly","deck D sector X1423","01-13-3248",5,"prev123.mp15"); 	
+
+	assert(recording.get_title() == "anomaly");	
+	assert(recording.get_location() == "deck D sector X1423");
+	assert(recording.get_time_of_creation() == "01-13-3248");
+	assert(recording.get_times_accessed() == 5);
+	assert(recording.get_footage_preview() == "prev123.mp15");
+
 	std::cout << "Recording getters tests passed!\n";
 }
+
+
+void Tests::test_recording_setters() {
+	Recording recording("anomaly","deck D sector X1423","01-13-3248",5,"prev123.mp15"); 	
+
+	recording.set_title("sometitle");
+	assert(recording.get_title() == "sometitle");	
+
+	std::cout << "Recording setters tests passed!\n";
+}
+
