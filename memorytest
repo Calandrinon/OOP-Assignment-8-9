@@ -1,0 +1,3 @@
+g++ -g -o main main.cpp tests.cpp
+valgrind --leak-check=full ./main
+rm main
