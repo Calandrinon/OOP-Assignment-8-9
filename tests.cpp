@@ -3,12 +3,14 @@
 #include <cassert>
 #include <string>
 #include <cstring>
+#include "recording.h"
 
 Tests::Tests() {
 	test_dynamic_vector_creation();
 	test_dynamic_vector_get_element_from_index();
 	test_dynamic_vector_push_back();
 	test_dynamic_vector_deletion();
+	test_recording_getters();
 }
 
 
@@ -73,4 +75,10 @@ void Tests::test_dynamic_vector_deletion() {
 
 	vector.free_vector();
 	std::cout << "Dynamic vector element deletion test passed!\n";
+}
+
+
+void Tests::test_recording_getters() {
+	Recording recording("anomaly","deck D sector X1423","01-13-3248",5,"prev123.mp15"); 	
+	std::cout << "Recording getters tests passed!\n";
 }
