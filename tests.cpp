@@ -3,7 +3,6 @@
 #include <cassert>
 #include <string>
 #include <cstring>
-#include "recording.h"
 
 Tests::Tests() {
 	test_dynamic_vector_creation();

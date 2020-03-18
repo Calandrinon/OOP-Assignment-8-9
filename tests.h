@@ -1,6 +1,8 @@
 #ifndef __TESTS_H__
 #define __TESTS_H__
 #include "dynamicvector.h"
+#include "repository.h"
+#include "service.h"
 
 class Tests {
 	public:
