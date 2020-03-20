@@ -14,6 +14,7 @@ class UI {
 		void run();
 		void exit();
 		void add();
+		void list();
 		std::vector<std::string> tokenize(std::string line, char delimiter);
 		std::string get_command_name(std::string full_command);
 };

@@ -1,5 +1,9 @@
 #include "recording.h"
 
+
+Recording::Recording() {}
+
+
 Recording::Recording(std::string title, std::string location, std::string time_of_creation, int times_accessed, std::string footage_preview) {
 	this->title = title;
 	this->location = location;
@@ -56,4 +60,9 @@ void Recording::set_times_accessed(int new_times_accessed) {
 
 void Recording::set_footage_preview(std::string new_footage_preview) {
 	footage_preview = new_footage_preview;
+}
+
+
+std::string Recording::get_as_string() {
+	return title + ", " + location + ", " + time_of_creation + ", " + to_string(times_accessed) + ", " + footage_preview;
 }

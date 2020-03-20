@@ -1,5 +1,7 @@
+#pragma once
 #include <iostream>
 #include <string>
+using namespace std;
 
 class Recording {
 	private:
@@ -10,6 +12,7 @@ class Recording {
 		std::string footage_preview;
 
 	public:
+		Recording();
 		Recording(std::string title, std::string location, std::string time_of_creation, int times_accessed, std::string footage_preview);
 		std::string get_title();
 		std::string get_location();
@@ -21,4 +24,5 @@ class Recording {
 		void set_time_of_creation(std::string new_time);
 		void set_times_accessed(int new_times_accessed);
 		void set_footage_preview(std::string new_footage_preview);
+		std::string get_as_string();
 };
