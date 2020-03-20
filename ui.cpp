@@ -1,6 +1,5 @@
 #include "ui.h"
 #include <string>
-#include <bits/stdc++.h>
 #include <exception>
 #include "myexceptions.h"
 using namespace std;
@@ -8,6 +7,7 @@ using namespace std;
 UI::UI(Service* service) {
 	running = true;
 	this->service = service;
+	this->security_clearance_mode = 'A';
 }
 
 
@@ -43,9 +43,6 @@ void UI::add() {
 		tokens[i] = service->strip(tokens[i]);
 
 	tokens[0].erase(0, 4);  // the title without the 'add' command name
-
-	vector<string> location_tokens = tokenize(tokens[1], ' ');
-
 	service->add(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4]);
 }
 
@@ -59,19 +56,56 @@ void UI::list() {
 }
 
 
+void UI::remove() {
+	vector<string> tokens = tokenize(this->last_command, ' ');
+
+	service->remove(tokens[1]);
+}
+
+
+void UI::update() {
+	vector<string> tokens = tokenize(this->last_command, ',');
+
+	if (tokens.size() != 5) {
+		cout << "The command update takes 5 parameters: add title, new_location, new_timeOfCreation, new_timesAccessed, new_footagePreview\n";
+		return;
+	}
+
+	for (int i = 0; i < tokens.size(); i++) 
+		tokens[i] = service->strip(tokens[i]);
+
+	tokens[0].erase(0, 7);  // the title without the 'add' command name
+	service->update(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4]);	
+}
+
+
+void UI::change_mode() {
+	vector<string> tokens = tokenize(this->last_command, ' ');
+
+	if (tokens.size() != 2 || tokens[1].size() > 1 || !(tokens[1][0] == 'A' || tokens[1][0] == 'B')) {
+		cout << "The command mode takes only one parameter with the values A or B!\n";
+		return;
+	}
+
+	this->security_clearance_mode = tokens[1][0];
+}
+
+
 void UI::run() {
-	string commands[] = {"exit", "add", "list"};
-	void (UI::*func[])() = {&UI::exit, &UI::add, &UI::list};
+	string commands[] = {"exit", "add", "list", "delete", "update", "mode"};
+	void (UI::*func[])() = {&UI::exit, &UI::add, &UI::list, &UI::remove, &UI::update, &UI::change_mode};
 	int number_of_commands = sizeof(commands)/sizeof(commands[0]);
 	string command;
-
-	cout << "Enter the security clearance mode: ";
-	cin >> security_clearance_mode;
-	cin.ignore();
 
 	while (running) {
 		cout << ">>";
 		getline(cin, command);
+
+		if (security_clearance_mode == 'B' && command != "list" && command != "exit") {
+			cout << "Permission denied!\n";
+			continue;
+		}
+
 		this->last_command = command;	
 		bool command_found = false;
 		string command_name = get_command_name(command);
@@ -85,6 +119,8 @@ void UI::run() {
 					cout << "Your command is not correctly formatted!\n";
 				} catch(invalid_argument ie) {
 					cout << "InvalidArgumentException: stoi can't convert string with letters into an int!\n";
+				} catch(RepositoryException re) {
+					cout << "Element doesn't exist!\n";
 				}
 			}
 		}

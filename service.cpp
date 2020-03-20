@@ -67,7 +67,6 @@ void Service::validate_times_accessed(string times_accessed) {
 
 
 void Service::add(string title, string location, string time_of_creation, string times_accessed, string footage_preview) {
-	validate_location(location);
 	validate_time_of_creation(time_of_creation);
 	validate_times_accessed(times_accessed);
 
@@ -78,4 +77,28 @@ void Service::add(string title, string location, string time_of_creation, string
 
 vector<Recording> Service::get_repository_container() {
 	return repository->get_container();
+}
+
+
+void Service::remove(string title) {
+	if (!repository->search(title)) {
+		RepositoryException re;
+		throw re;
+	}
+	repository->remove(title);
+}
+
+
+void Service::update(string title, string location, string time_of_creation, string times_accessed, string footage_preview) {
+	validate_time_of_creation(time_of_creation);
+	validate_times_accessed(times_accessed);
+
+	if (!repository->search(title)) {
+		RepositoryException re;
+		throw re;
+	}
+	
+	repository->remove(title);
+	Recording recording(title, location, time_of_creation, stoi(times_accessed), footage_preview); 	
+	repository->add(recording);
 }

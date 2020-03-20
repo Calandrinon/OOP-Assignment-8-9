@@ -15,5 +15,7 @@ class Repository {
 		void add(Recording r);
 		//DynamicVector<Recording> get_container();
 		vector<Recording> get_container();
+		void remove(string title);
+		bool search(string title);
 		~Repository();
 };
