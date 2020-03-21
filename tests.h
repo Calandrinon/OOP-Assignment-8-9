@@ -20,6 +20,7 @@ class Tests {
 		void test_repository_search();
 		void test_service_update();
 		void test_dynamic_vector_assignment_operator();
+		void test_dynamic_vector_overloaded_subscript();
 };
 
 #endif

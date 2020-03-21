@@ -20,6 +20,7 @@ Tests::Tests() {
 	test_repository_search();
 	test_service_update();
 	test_dynamic_vector_assignment_operator();
+	test_dynamic_vector_overloaded_subscript();
 }
 
 
@@ -200,4 +201,14 @@ void Tests::test_dynamic_vector_assignment_operator() {
 	assert(vector2.element(1) == vector.element(1));
 
 	cout << "Dynamic vector assignment operator test passed!\n";
+}
+
+
+void Tests::test_dynamic_vector_overloaded_subscript() {
+	DynamicVector<int> vector;
+	vector.push_back(17);
+
+	assert(vector[0] == 17);
+
+	cout << "Dynamic vector overloaded subscript test passed!\n";
 }

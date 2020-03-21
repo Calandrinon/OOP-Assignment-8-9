@@ -83,6 +83,15 @@ class DynamicVector {
 		}	
 
 
+		T& operator[](int index) {
+			if (index >= number_of_elements) {
+				throw "IndexError";
+			}
+
+			return array[index];
+		}
+
+
 		int size() {
 			return number_of_elements;	
 		}
