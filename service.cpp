@@ -38,7 +38,7 @@ void Service::validate_location(string location) {
 	vector<string> tokens = tokenize(location, ' ');
 
 	if (tokens[0] != "deck" || tokens[2] != "sector") {
-		CommandFormatException command_format_exception;
+		CommandFormatException command_format_exception("Incorrect location format!\n");
 		throw command_format_exception;
 	}
 }
@@ -49,7 +49,7 @@ void Service::validate_time_of_creation(string time_of_creation) {
 	vector<string> tokens = tokenize(time_of_creation, '-');
 
 	if (tokens.size() != 3) {
-		CommandFormatException command_format_exception;
+		CommandFormatException command_format_exception("Incorrect time of creation format!\n");
 		throw command_format_exception; 
 	}
 
@@ -82,7 +82,7 @@ vector<Recording> Service::get_repository_container() {
 
 void Service::remove(string title) {
 	if (!repository->search(title)) {
-		RepositoryException re;
+		RepositoryException re("RepositoryException: The element cannot be removed because it doesn't exist!\n");
 		throw re;
 	}
 	repository->remove(title);
@@ -94,7 +94,7 @@ void Service::update(string title, string location, string time_of_creation, str
 	validate_times_accessed(times_accessed);
 
 	if (!repository->search(title)) {
-		RepositoryException re;
+		RepositoryException re("RepositoryException: The element cannot be updated because it doesn't exist!\n");
 		throw re;
 	}
 	

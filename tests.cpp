@@ -19,12 +19,12 @@ Tests::Tests() {
 	test_service_delete();
 	test_repository_search();
 	test_service_update();
+	test_dynamic_vector_assignment_operator();
 }
 
 
 void Tests::test_dynamic_vector_creation() {
 	DynamicVector<char> vector;
-	vector.free_vector();
 
 	std::cout << "Dynamic vector creation test passed!\n";
 }
@@ -48,7 +48,6 @@ void Tests::test_dynamic_vector_get_element_from_index() {
 		assert(false);
 	} catch(...) {}
 
-	vector.free_vector();
 	std::cout << "Dynamic vector element extraction test passed!\n";
 }
 
@@ -63,7 +62,6 @@ void Tests::test_dynamic_vector_push_back() {
 	assert(strcmp(vector.element(1), "def") == 0);
 	assert(vector.size() == 3);
 
-	vector.free_vector();
 	std::cout << "Dynamic vector push_back method test passed!\n";
 }
 
@@ -81,7 +79,6 @@ void Tests::test_dynamic_vector_deletion() {
 
 	assert(vector.size() == 2);
 
-	vector.free_vector();
 	std::cout << "Dynamic vector element deletion test passed!\n";
 }
 
@@ -186,5 +183,21 @@ void Tests::test_service_update() {
 
 	assert(container[0].get_footage_preview() == "abc.mp4");
 	
-	cout << "Service delete operation test passed!\n";
+	cout << "Service update operation test passed!\n";
+}
+
+
+void Tests::test_dynamic_vector_assignment_operator() {
+	DynamicVector<int> vector;
+	vector.push_back(5);
+	vector.push_back(2);
+	assert(vector.size() == 2);
+	
+	DynamicVector<int> vector2;
+	vector2 = vector;
+	assert(vector2.size() == 2);
+	assert(vector2.element(0) == vector.element(0));
+	assert(vector2.element(1) == vector.element(1));
+
+	cout << "Dynamic vector assignment operator test passed!\n";
 }

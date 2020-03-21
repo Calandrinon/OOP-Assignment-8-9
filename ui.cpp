@@ -116,11 +116,11 @@ void UI::run() {
 				try {
 					(this->*func[i])();
 				} catch (CommandFormatException cfe) {
-					cout << "Your command is not correctly formatted!\n";
+					cout << cfe.message;
 				} catch(invalid_argument ie) {
 					cout << "InvalidArgumentException: stoi can't convert string with letters into an int!\n";
 				} catch(RepositoryException re) {
-					cout << "Element doesn't exist!\n";
+					cout << re.message;
 				}
 			}
 		}

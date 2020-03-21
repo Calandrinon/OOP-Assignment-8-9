@@ -1,6 +1,7 @@
 #ifndef __DYNAMICVECTOR_H__
 #define __DYNAMICVECTOR_H__
 #include <cstdlib>
+#include <cstring>
 
 template <class T>
 class DynamicVector {
@@ -11,7 +12,7 @@ class DynamicVector {
 
     public:
         DynamicVector() {
-        	this->array = (T*)malloc(sizeof(T));
+        	this->array = new T[1];
         	this->number_of_elements = 0;
         }
 
@@ -20,11 +21,11 @@ class DynamicVector {
         	array[number_of_elements] = element;
         	number_of_elements++;
 
-        	T* new_array = (T*)malloc(sizeof(T)*(number_of_elements+1));
+        	T* new_array = new T[number_of_elements+1];
         	for (int i = 0; i < number_of_elements; i++)
         		new_array[i] = array[i];
 
-			free(array);
+			delete[] array;
         	array = new_array;
         }
 		
@@ -33,14 +34,14 @@ class DynamicVector {
 			if (index + elements_to_delete >= number_of_elements)
 				throw "IndexError: Can't delete elements outside of range!\n";
 
-			T* new_array = (T*)malloc(sizeof(T)*(number_of_elements-elements_to_delete+1));
+			T* new_array = new T[number_of_elements-elements_to_delete+1];
 			for (int i = 0; i < index; i++)
 				new_array[i] = array[i];
 
 			for (int i = index + elements_to_delete; i < number_of_elements; i++)
 				new_array[i-elements_to_delete]=array[i];
 
-			free(array);	
+			delete[] array;	
 			array = new_array;
 
 			number_of_elements -= elements_to_delete;
@@ -68,16 +69,29 @@ class DynamicVector {
 		}
 
 
+		DynamicVector<T>& operator=(DynamicVector<T> &other_vector) {
+			number_of_elements = other_vector.size();
+
+			delete[] array;
+			array = new T[number_of_elements];
+
+			for (int i = 0; i < number_of_elements; i++) {
+				array[i] = other_vector.element(i);
+			}
+
+			return *this;
+		}	
+
+
 		int size() {
 			return number_of_elements;	
 		}
 
 
-        void free_vector() {	
-        	free(array);
+        ~DynamicVector() {	
+        	delete[] array;
         }
 };
-
 
 
 #endif
