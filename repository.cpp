@@ -18,14 +18,20 @@ void Repository::add(Recording r) {
 
 
 vector<Recording> Repository::get_container() {
-	return container;
+	vector<Recording> vector_container;
+
+	for (int i = 0; i < container.size(); i++) {
+		vector_container.push_back(container[i]);
+	}
+
+	return vector_container;
 }
 
 
 void Repository::remove(string title) {
 	for (int i = 0; i < container.size(); i++) {
 		if (container[i].get_title() == title) {
-			container.erase(container.begin()+i);
+			container.remove(i, 1);
 			return;
 		}
 	}

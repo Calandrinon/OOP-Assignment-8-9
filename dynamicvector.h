@@ -31,7 +31,7 @@ class DynamicVector {
 		
 
 		void remove(int index, int elements_to_delete) {
-			if (index + elements_to_delete >= number_of_elements)
+			if (index + elements_to_delete > number_of_elements)
 				throw "IndexError: Can't delete elements outside of range!\n";
 
 			T* new_array = new T[number_of_elements-elements_to_delete+1];
