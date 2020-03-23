@@ -2,6 +2,7 @@
 #define __DYNAMICVECTOR_H__
 #include <cstdlib>
 #include <cstring>
+#include "myexceptions.h"
 
 template <class T>
 class DynamicVector {
@@ -48,27 +49,6 @@ class DynamicVector {
 		}
 
 
-		T element(int index) {
-			/**
-			 * Returns the element at index "index" in the 
-			 * dynamic vector.
-			 *
-			 * Input:
-			 * 	- index: int
-			 *
-			 * Output:
-			 * 	- an element of type T from the index "index"
-			 *
-			 * **/
-			
-			if (index >= number_of_elements) {
-				throw "IndexError";		
-			}
-
-			return array[index];
-		}
-
-
 		DynamicVector<T>& operator=(DynamicVector<T> &other_vector) {
 			number_of_elements = other_vector.size();
 
@@ -83,9 +63,20 @@ class DynamicVector {
 		}	
 
 
+		T element(int index) {
+			if (index >= number_of_elements) {
+				IndexError ie("IndexError: Can't delete elements outside of range!\n");
+				throw ie;		
+			}
+
+			return array[index];
+		}	
+
+
 		T& operator[](int index) {
 			if (index >= number_of_elements) {
-				throw "IndexError";
+				IndexError ie("IndexError: Can't delete elements outside of range!\n");
+				throw ie;		
 			}
 
 			return array[index];

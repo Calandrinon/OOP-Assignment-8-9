@@ -91,11 +91,25 @@ void UI::change_mode() {
 }
 
 
+void UI::help() {
+	cout << "\nAvailable commands:\n";
+	cout << " - mode X (e.g. mode A) Note: mode B is the user mode without admin permissions, which permits only the \"list\" and \"exit\" commands.\n"
+    " - add title, location, timeOfCreation, timesAccessed, footagePreview (eg. add anomaly, deck D sector X1423, 01-13-3248, 5, prev123.mp15)\n"
+    " - update title, newLocation, newTimeOfCreation, newTimesAccessed, newFootagePreview (eg. update anomaly, deck E sector X1423, 01-14-3248, 14, prev124.mp15)\n"
+    " - delete title (eg. delete anomaly)\n"
+    " - list\n"
+	" - help\n"
+    " - exit\n\n";
+}
+
+
 void UI::run() {
-	string commands[] = {"exit", "add", "list", "delete", "update", "mode"};
-	void (UI::*func[])() = {&UI::exit, &UI::add, &UI::list, &UI::remove, &UI::update, &UI::change_mode};
+	string commands[] = {"exit", "add", "list", "delete", "update", "mode", "help"};
+	void (UI::*func[])() = {&UI::exit, &UI::add, &UI::list, &UI::remove, &UI::update, &UI::change_mode, &UI::help};
 	int number_of_commands = sizeof(commands)/sizeof(commands[0]);
 	string command;
+
+	help();	
 
 	while (running) {
 		cout << ">>";
@@ -121,6 +135,8 @@ void UI::run() {
 					cout << "InvalidArgumentException: stoi can't convert string with letters into an int!\n";
 				} catch(RepositoryException re) {
 					cout << re.message;
+				} catch(IndexError ie) {
+					cout << ie.message;
 				}
 			}
 		}
