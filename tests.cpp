@@ -28,6 +28,7 @@ void Tests::test_dynamic_vector_creation() {
 	DynamicVector<char> vector;
 
 	std::cout << "Dynamic vector creation test passed!\n";
+	vector.free();
 }
 
 
@@ -50,6 +51,7 @@ void Tests::test_dynamic_vector_get_element_from_index() {
 	} catch(...) {}
 
 	std::cout << "Dynamic vector element extraction test passed!\n";
+	vector.free();
 }
 
 
@@ -64,6 +66,7 @@ void Tests::test_dynamic_vector_push_back() {
 	assert(vector.size() == 3);
 
 	std::cout << "Dynamic vector push_back method test passed!\n";
+	vector.free();
 }
 
 
@@ -81,6 +84,7 @@ void Tests::test_dynamic_vector_deletion() {
 	assert(vector.size() == 2);
 
 	std::cout << "Dynamic vector element deletion test passed!\n";
+	vector.free();
 }
 
 
@@ -113,7 +117,7 @@ void Tests::test_repository_add() {
 	Recording recording("anomaly","deck D sector X1423","01-13-3248",5,"prev123.mp15"); 	
 	repository.add(recording);
 
-	vector<Recording> container = repository.get_container();
+	DynamicVector<Recording> container = repository.get_container();
 	assert(container[0].get_title() == recording.get_title());
 
 	cout << "Repository add operation test passed!\n";
@@ -126,8 +130,7 @@ void Tests::test_service_add() {
 
 	service.add("anomaly","deck D sector X1423","01-13-3248","5","prev123.mp15");
 
-	vector<Recording> container = repository.get_container();
-
+	DynamicVector<Recording> container = repository.get_container();
 	assert(container.size() == 1);
 
 	cout << "Service add operation test passed!\n";
@@ -180,10 +183,8 @@ void Tests::test_service_update() {
 	assert(repository.get_container().size() == 1);
 
 	service.update("anomaly", "deck X sector X200","01-13-3500","1","abc.mp4");
-	vector<Recording> container = repository.get_container();
-
+	DynamicVector<Recording> container = repository.get_container();
 	assert(container[0].get_footage_preview() == "abc.mp4");
-	
 	cout << "Service update operation test passed!\n";
 }
 
@@ -199,7 +200,8 @@ void Tests::test_dynamic_vector_assignment_operator() {
 	assert(vector2.size() == 2);
 	assert(vector2.element(0) == vector.element(0));
 	assert(vector2.element(1) == vector.element(1));
-
+	vector.free();
+	vector2.free();
 	cout << "Dynamic vector assignment operator test passed!\n";
 }
 
@@ -209,6 +211,7 @@ void Tests::test_dynamic_vector_overloaded_subscript() {
 	vector.push_back(17);
 
 	assert(vector[0] == 17);
+	vector.free();
 
 	cout << "Dynamic vector overloaded subscript test passed!\n";
 }

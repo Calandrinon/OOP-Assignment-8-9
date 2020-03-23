@@ -1,4 +1,5 @@
 #include "repository.h"
+#include "dynamicvector.h"
 
 Repository::Repository() {
 
@@ -17,14 +18,8 @@ void Repository::add(Recording r) {
 }
 
 
-vector<Recording> Repository::get_container() {
-	vector<Recording> vector_container;
-
-	for (int i = 0; i < container.size(); i++) {
-		vector_container.push_back(container[i]);
-	}
-
-	return vector_container;
+DynamicVector<Recording> Repository::get_container() {
+	return container;
 }
 
 
@@ -39,7 +34,7 @@ void Repository::remove(string title) {
 
 
 Repository::~Repository() {
-	//container.free_vector();
+	container.free();
 }
 
 

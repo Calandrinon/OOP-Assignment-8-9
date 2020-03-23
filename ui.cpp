@@ -2,6 +2,7 @@
 #include <string>
 #include <exception>
 #include "myexceptions.h"
+#include "dynamicvector.h"
 using namespace std;
 
 UI::UI(Service* service) {
@@ -48,7 +49,7 @@ void UI::add() {
 
 
 void UI::list() {
-	vector<Recording> container = service->get_repository_container();
+	DynamicVector<Recording> container = service->get_repository_container();
 
 	for (int i = 0; i < container.size(); i++) {
 		cout << container[i].get_as_string() << "\n";
@@ -108,6 +109,10 @@ void UI::run() {
 	void (UI::*func[])() = {&UI::exit, &UI::add, &UI::list, &UI::remove, &UI::update, &UI::change_mode, &UI::help};
 	int number_of_commands = sizeof(commands)/sizeof(commands[0]);
 	string command;
+
+	service->add("anomaly", "deck D sector x1423", "01-10-2000", "5", "prev123.mp4");
+	service->add("anomaly2", "deck E sector x20", "01-10-2000", "2", "prev124.mp4");
+	service->add("anomaly3", "deck F sector x1422", "02-10-2000", "3", "prev125.mp4");
 
 	help();	
 

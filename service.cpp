@@ -2,6 +2,7 @@
 #include <sstream>
 #include "myexceptions.h"
 #include "recording.h"
+#include "dynamicvector.h"
 using namespace std;
 
 Service::Service(Repository* repository) {
@@ -112,10 +113,9 @@ void Service::add(string title, string location, string time_of_creation, string
 }
 
 
-vector<Recording> Service::get_repository_container() {
+DynamicVector<Recording> Service::get_repository_container() {
 	/**
-	 * Gets the contents of the custom-made DynamicVector from the repository as a std::vector 
-	 * container.
+	 * Gets the contents of the custom-made DynamicVector from the repository.
 	 * 
 	 **/
 	return repository->get_container();

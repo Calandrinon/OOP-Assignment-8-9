@@ -19,5 +19,5 @@ class Service {
 		void add(string title, string location, string timeOfCreation, string timesAccessed, string footagePreview);
 		void remove(string title);
 		void update(string title, string location, string time_of_creation, string times_accessed, string footage_preview);
-		vector<Recording> get_repository_container();
+		DynamicVector<Recording> get_repository_container();
 };

@@ -1,6 +1,7 @@
 #include <iostream>
 #include "tests.h"
 #include "ui.h"
+//#include <crtdbg.h>
 
 int main() {
 	Tests();
@@ -12,5 +13,6 @@ int main() {
 	
 	delete repository;
 	delete service;
+	//_CrtDumpMemoryLeaks();
 	return 0;
 }

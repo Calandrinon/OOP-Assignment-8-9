@@ -12,7 +12,7 @@ class Repository {
 	public:
 		Repository();
 		void add(Recording r);
-		vector<Recording> get_container();
+		DynamicVector<Recording> get_container();
 		void remove(string title);
 		bool search(string title);
 		~Repository();

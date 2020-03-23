@@ -88,9 +88,15 @@ class DynamicVector {
 		}
 
 
-        ~DynamicVector() {	
+		void free() {
+			delete[] array;
+		}
+
+		/**
+	        ~DynamicVector() {	
         	delete[] array;
         }
+		**/
 };
 
 
