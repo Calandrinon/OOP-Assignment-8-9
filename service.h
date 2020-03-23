@@ -11,7 +11,7 @@ class Service {
 
 	public:
 		Service(Repository*);
-		vector<string> tokenize(string line, char delimiter);
+		DynamicVector<string> tokenize(string line, char delimiter);
 		string strip(string str);
 		void validate_location(string location);
 		void validate_time_of_creation(string time_of_creation);

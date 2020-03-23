@@ -17,23 +17,25 @@ void UI::exit() {
 }
 
 
-vector<string> UI::tokenize(string line, char delimiter) {
+DynamicVector<string> UI::tokenize(string line, char delimiter) {
 	return service->tokenize(line, delimiter);
 }
 
 
 string UI::get_command_name(string full_command) {
-	vector<string> tokens = tokenize(full_command, ' ');
+	DynamicVector<string> tokens = tokenize(full_command, ' ');
 
 	if (tokens.size() == 0)
 		return "-1";
 
-	return tokens[0]; 
+	string command_name = tokens[0];
+	tokens.free();
+	return command_name; 
 }
 
 
 void UI::add() {
-	vector<string> tokens = tokenize(this->last_command, ',');
+	DynamicVector<string> tokens = tokenize(this->last_command, ',');
 
 	if (tokens.size() != 5) {
 		cout << "The command add takes 5 parameters: add title, location, timeOfCreation, timesAccessed, footagePreview\n";
@@ -45,6 +47,7 @@ void UI::add() {
 
 	tokens[0].erase(0, 4);  // the title without the 'add' command name
 	service->add(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4]);
+	tokens.free();
 }
 
 
@@ -58,14 +61,16 @@ void UI::list() {
 
 
 void UI::remove() {
-	vector<string> tokens = tokenize(this->last_command, ' ');
+	DynamicVector<string> tokens = tokenize(this->last_command, ' ');
 
 	service->remove(tokens[1]);
+
+	tokens.free();
 }
 
 
 void UI::update() {
-	vector<string> tokens = tokenize(this->last_command, ',');
+	DynamicVector<string> tokens = tokenize(this->last_command, ',');
 
 	if (tokens.size() != 5) {
 		cout << "The command update takes 5 parameters: add title, new_location, new_timeOfCreation, new_timesAccessed, new_footagePreview\n";
@@ -77,11 +82,13 @@ void UI::update() {
 
 	tokens[0].erase(0, 7);  // the title without the 'add' command name
 	service->update(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4]);	
+
+	tokens.free();
 }
 
 
 void UI::change_mode() {
-	vector<string> tokens = tokenize(this->last_command, ' ');
+	DynamicVector<string> tokens = tokenize(this->last_command, ' ');
 
 	if (tokens.size() != 2 || tokens[1].size() > 1 || !(tokens[1][0] == 'A' || tokens[1][0] == 'B')) {
 		cout << "The command mode takes only one parameter with the values A or B!\n";
@@ -89,6 +96,7 @@ void UI::change_mode() {
 	}
 
 	this->security_clearance_mode = tokens[1][0];
+	tokens.free();
 }
 
 

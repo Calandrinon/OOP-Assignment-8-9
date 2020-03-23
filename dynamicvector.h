@@ -10,7 +10,6 @@ class DynamicVector {
         T *array;
         int number_of_elements;
 
-
     public:
         DynamicVector() {
         	this->array = new T[1];
