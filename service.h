@@ -21,6 +21,8 @@ class Service {
 		void remove(string title);
 		bool search(string title);
 		void next();
+		void save();
+		DynamicVector<Recording> get_watchlist();
 		void update(string title, string location, string time_of_creation, string times_accessed, string footage_preview);
 		DynamicVector<Recording> get_repository_container();
 		~Service();

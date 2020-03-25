@@ -20,6 +20,8 @@ class UI {
 		void change_mode();
 		void help();
 		void next();
+		void save();
+		void mylist();
 		DynamicVector<std::string> tokenize(std::string line, char delimiter);
 		std::string get_command_name(std::string full_command);
 };

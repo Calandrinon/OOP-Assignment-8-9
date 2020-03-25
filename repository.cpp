@@ -1,5 +1,6 @@
 #include "repository.h"
 #include "dynamicvector.h"
+#include "myexceptions.h"
 
 Repository::Repository() {
 	selected_recording = 0;
@@ -57,4 +58,18 @@ void Repository::next() {
 		selected_recording = 0;
 	}
 	cout << selected_recording << "\n";
+}
+
+
+void Repository::save() {
+	if (selected_recording >= container.size()) {
+		IndexError ie("IndexError: You haven't added any recordings!\n");
+		throw ie;
+	}
+	watch_list.push_back(container[selected_recording]);
+}
+
+
+DynamicVector<Recording> Repository::get_watchlist() {
+	return watch_list;
 }

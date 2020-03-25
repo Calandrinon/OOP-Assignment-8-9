@@ -174,6 +174,16 @@ void Service::next() {
 }
 
 
+void Service::save() {
+	repository->save();
+}
+
+
+DynamicVector<Recording> Service::get_watchlist() {
+	return repository->get_watchlist();
+}
+
+
 Service::~Service() {
 	delete watch_list;
 }

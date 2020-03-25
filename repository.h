@@ -17,6 +17,8 @@ class Repository {
 		DynamicVector<Recording> get_container();
 		void remove(string title);
 		void next();
+		void save();
+		DynamicVector<Recording> get_watchlist();
 		bool search(string title);
 		~Repository();
 };

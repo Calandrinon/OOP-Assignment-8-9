@@ -136,10 +136,24 @@ void UI::next() {
 }
 
 
+void UI::save() {
+	service->save();
+} 
+
+
+void UI::mylist() {
+	DynamicVector<Recording> watch_list = service->get_watchlist();
+
+	for (int i = 0; i < watch_list.size(); i++) {
+		cout << watch_list[i].get_as_string() << "\n";
+	}
+}
+
+
 void UI::run() {
-	string commands[] = {"exit", "add", "list", "delete", "update", "mode", "help", "next"};
-	string permissions[] = {"all", "admin", "all", "admin", "admin", "admin", "all", "all"};
-	void (UI::*func[])() = {&UI::exit, &UI::add, &UI::list, &UI::remove, &UI::update, &UI::change_mode, &UI::help, &UI::next};
+	string commands[] = {"exit", "add", "list", "delete", "update", "mode", "help", "next", "save", "mylist"};
+	string permissions[] = {"all", "admin", "all", "admin", "admin", "admin", "all", "all", "all", "all"};
+	void (UI::*func[])() = {&UI::exit, &UI::add, &UI::list, &UI::remove, &UI::update, &UI::change_mode, &UI::help, &UI::next, &UI::save, &UI::mylist};
 	int number_of_commands = sizeof(commands)/sizeof(commands[0]);
 	string command;
 
@@ -152,11 +166,6 @@ void UI::run() {
 	while (running) {
 		cout << ">>";
 		getline(cin, command);
-
-		if (security_clearance_mode == 'B' && command != "list" && command != "exit") {
-			cout << "Permission denied!\n";
-			continue;
-		}
 
 		this->last_command = command;	
 		bool command_found = false;
