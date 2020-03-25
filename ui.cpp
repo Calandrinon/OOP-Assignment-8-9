@@ -132,7 +132,7 @@ void UI::help() {
 
 
 void UI::next() {
-	service->next();
+	cout << service->next() << "\n";
 }
 
 

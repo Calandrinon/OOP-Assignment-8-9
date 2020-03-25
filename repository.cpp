@@ -51,13 +51,14 @@ bool Repository::search(string title) {
 }
 
 
-void Repository::next() {
+string Repository::next() {
 	if (selected_recording + 1 < container.size()) {
 		selected_recording++;
 	} else {
 		selected_recording = 0;
 	}
-	cout << selected_recording << "\n";
+
+	return container[selected_recording].get_as_string();	
 }
 
 

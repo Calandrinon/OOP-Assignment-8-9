@@ -169,8 +169,8 @@ void Service::update(string title, string location, string time_of_creation, str
 }
 
 
-void Service::next() {
-	repository->next();
+string Service::next() {
+	return repository->next();
 }
 
 
