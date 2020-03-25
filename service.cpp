@@ -169,6 +169,11 @@ void Service::update(string title, string location, string time_of_creation, str
 }
 
 
+void Service::next() {
+	repository->next();
+}
+
+
 Service::~Service() {
 	delete watch_list;
 }

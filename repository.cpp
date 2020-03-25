@@ -2,7 +2,7 @@
 #include "dynamicvector.h"
 
 Repository::Repository() {
-
+	selected_recording = 0;
 }
 
 
@@ -35,6 +35,7 @@ void Repository::remove(string title) {
 
 Repository::~Repository() {
 	container.free();
+	watch_list.free();
 }
 
 
@@ -46,4 +47,14 @@ bool Repository::search(string title) {
 	}
 
 	return false;
+}
+
+
+void Repository::next() {
+	if (selected_recording + 1 < container.size()) {
+		selected_recording++;
+	} else {
+		selected_recording = 0;
+	}
+	cout << selected_recording << "\n";
 }

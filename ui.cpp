@@ -131,15 +131,21 @@ void UI::help() {
 }
 
 
+void UI::next() {
+	service->next();
+}
+
+
 void UI::run() {
-	string commands[] = {"exit", "add", "list", "delete", "update", "mode", "help"};
-	void (UI::*func[])() = {&UI::exit, &UI::add, &UI::list, &UI::remove, &UI::update, &UI::change_mode, &UI::help};
+	string commands[] = {"exit", "add", "list", "delete", "update", "mode", "help", "next"};
+	string permissions[] = {"all", "admin", "all", "admin", "admin", "admin", "all", "all"};
+	void (UI::*func[])() = {&UI::exit, &UI::add, &UI::list, &UI::remove, &UI::update, &UI::change_mode, &UI::help, &UI::next};
 	int number_of_commands = sizeof(commands)/sizeof(commands[0]);
 	string command;
 
-	service->add("anomaly", "deck D sector x1423", "01-10-2000", "5", "prev123.mp4");
-	service->add("anomaly2", "deck E sector x20", "01-10-2000", "2", "prev124.mp4");
-	service->add("anomaly3", "deck F sector x1422", "02-10-2000", "3", "prev125.mp4");
+	//service->add("anomaly", "deck D sector x1423", "01-10-2000", "5", "prev123.mp4");
+	//service->add("anomaly2", "deck E sector x20", "01-10-2000", "2", "prev124.mp4");
+	//service->add("anomaly3", "deck F sector x1422", "02-10-2000", "3", "prev125.mp4");
 
 	help();	
 
@@ -159,6 +165,11 @@ void UI::run() {
 		for (int i = 0; i < number_of_commands && !command_found; i++) {
 			if (commands[i] == command_name) {
 				command_found = true;
+				if (security_clearance_mode == 'B' && permissions[i] == "admin") {
+					cout << "Permission denied!\n";
+					continue;
+				}
+
 				try {
 					(this->*func[i])();
 				} catch (CommandFormatException cfe) {
