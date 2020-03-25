@@ -25,8 +25,10 @@ DynamicVector<string> UI::tokenize(string line, char delimiter) {
 string UI::get_command_name(string full_command) {
 	DynamicVector<string> tokens = tokenize(full_command, ' ');
 
-	if (tokens.size() == 0)
+	if (tokens.size() == 0) {
+		tokens.free();
 		return "-1";
+	}
 
 	string command_name = tokens[0];
 	tokens.free();
@@ -39,6 +41,7 @@ void UI::add() {
 
 	if (tokens.size() != 5) {
 		cout << "The command add takes 5 parameters: add title, location, timeOfCreation, timesAccessed, footagePreview\n";
+		tokens.free();	
 		return;
 	}
 
@@ -63,17 +66,25 @@ void UI::list() {
 void UI::remove() {
 	DynamicVector<string> tokens = tokenize(this->last_command, ' ');
 
-	service->remove(tokens[1]);
+	if (!service->search(tokens[1])) {
+		cout << "The element doesn't exist!\n";
+		tokens.free();
+		return;
+	}
+
+	string title = tokens[1];
+	service->remove(title);
 
 	tokens.free();
 }
 
 
 void UI::update() {
-	DynamicVector<string> tokens = tokenize(this->last_command, ',');
+	DynamicVector<string> tokens = service->tokenize(this->last_command, ',');
 
 	if (tokens.size() != 5) {
 		cout << "The command update takes 5 parameters: add title, new_location, new_timeOfCreation, new_timesAccessed, new_footagePreview\n";
+		tokens.free();
 		return;
 	}
 
@@ -81,6 +92,13 @@ void UI::update() {
 		tokens[i] = service->strip(tokens[i]);
 
 	tokens[0].erase(0, 7);  // the title without the 'add' command name
+
+	if (!service->search(tokens[0])) {
+		cout << "The element doesn't exist!\n";
+		tokens.free();
+		return;
+	}
+
 	service->update(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4]);	
 
 	tokens.free();
@@ -92,6 +110,7 @@ void UI::change_mode() {
 
 	if (tokens.size() != 2 || tokens[1].size() > 1 || !(tokens[1][0] == 'A' || tokens[1][0] == 'B')) {
 		cout << "The command mode takes only one parameter with the values A or B!\n";
+		tokens.free();
 		return;
 	}
 

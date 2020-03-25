@@ -7,6 +7,7 @@ using namespace std;
 
 Service::Service(Repository* repository) {
 	this->repository = repository;
+	this->watch_list = new Repository();
 }
 
 
@@ -124,6 +125,11 @@ DynamicVector<Recording> Service::get_repository_container() {
 }
 
 
+bool Service::search(string title) {
+	return repository->search(title);
+}
+
+
 void Service::remove(string title) {
 	/**
 	 * 
@@ -132,10 +138,7 @@ void Service::remove(string title) {
 	 * Input:
 	 * 		- title: string
 	 **/
-	if (!repository->search(title)) {
-		RepositoryException re("RepositoryException: The element cannot be removed because it doesn't exist!\n");
-		throw re;
-	}
+		
 	repository->remove(title);
 }
 
@@ -163,4 +166,9 @@ void Service::update(string title, string location, string time_of_creation, str
 	repository->remove(title);
 	Recording recording(title, location, time_of_creation, stoi(times_accessed), footage_preview); 	
 	repository->add(recording);
+}
+
+
+Service::~Service() {
+	delete watch_list;
 }

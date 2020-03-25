@@ -8,6 +8,7 @@ using namespace std;
 class Service {
 	private:
 		Repository* repository;
+		Repository* watch_list;
 
 	public:
 		Service(Repository*);
@@ -18,6 +19,8 @@ class Service {
 		void validate_times_accessed(string times_accessed);		
 		void add(string title, string location, string timeOfCreation, string timesAccessed, string footagePreview);
 		void remove(string title);
+		bool search(string title);
 		void update(string title, string location, string time_of_creation, string times_accessed, string footage_preview);
 		DynamicVector<Recording> get_repository_container();
+		~Service();
 };
