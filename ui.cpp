@@ -56,10 +56,37 @@ void UI::add() {
 
 void UI::list() {
 	DynamicVector<Recording> container = service->get_repository_container();
+	DynamicVector<string> tokens = tokenize(this->last_command, ',');
+	string location;
+	int times_accessed;
+
+	if (tokens.size() == 2) {
+		for (int i = 0; i < tokens.size(); i++)
+			tokens[i] = service->strip(tokens[i]);
+
+		tokens[0].erase(0, 5);
+
+		location = tokens[0];
+		try {
+			times_accessed = stoi(tokens[1]);
+		} catch (invalid_argument ie) {
+			tokens.free();
+			throw ie;
+		}
+	} else if (tokens.size() != 1) {
+		cout << "The command list should take no parameters or 2 parameters. Check help\n";
+		return;
+	}
 
 	for (int i = 0; i < container.size(); i++) {
+		if (tokens.size() == 2) {
+			if (container[i].get_location() == location && container[i].get_times_accessed() < times_accessed)
+				cout << container[i].get_as_string() << "\n";
+			continue;
+		}
 		cout << container[i].get_as_string() << "\n";
 	}
+	tokens.free();
 }
 
 
