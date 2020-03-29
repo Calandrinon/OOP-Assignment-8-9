@@ -148,12 +148,16 @@ void UI::change_mode() {
 
 void UI::help() {
 	cout << "\nAvailable commands:\n";
-	cout << " - mode X (e.g. mode A) Note: mode B is the user mode without admin permissions, which permits only the \"list\" and \"exit\" commands.\n"
+	cout << " - mode X (e.g. mode A) Note: mode B is the user mode without admin permissions, which permits only the \"list\", \"next\", \"save\", \"mylist\" and \"exit\" commands.\n"
     " - add title, location, timeOfCreation, timesAccessed, footagePreview (eg. add anomaly, deck D sector X1423, 01-13-3248, 5, prev123.mp15)\n"
     " - update title, newLocation, newTimeOfCreation, newTimesAccessed, newFootagePreview (eg. update anomaly, deck E sector X1423, 01-14-3248, 14, prev124.mp15)\n"
     " - delete title (eg. delete anomaly)\n"
     " - list\n"
 	" - help\n"
+	" - next - When the user selects this option by selecting next, the data of the first selected recording is displayed and the preview is played back on a holo-screen, at any given security terminal."
+	" - save - Saves the currently selected recording"
+	" - list location, timesAccessed -> Displays the recordings for a given location having the number of times accessed smaller than the second given amount."
+	" - mylist - displays the playlist of recordings.\n"
     " - exit\n\n";
 }
 
@@ -185,9 +189,9 @@ void UI::run() {
 	string command;
 
 	service->add("anomaly", "deck D sector x1423", "01-10-2000", "5", "prev123.mp4");
+	service->add("anomaly4", "deck D sector x1423", "01-10-2000", "12", "prev654.mp4");
 	service->add("anomaly2", "deck E sector x20", "01-10-2000", "2", "prev124.mp4");
 	service->add("anomaly3", "deck F sector x1422", "02-10-2000", "3", "prev125.mp4");
-	service->add("anomaly4", "deck D sector x1423", "01-10-2000", "12", "prev654.mp4");
 	help();	
 
 	while (running) {
