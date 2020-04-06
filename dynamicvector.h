@@ -1,6 +1,7 @@
 #ifndef __DYNAMICVECTOR_H__
 #define __DYNAMICVECTOR_H__
 #include <cstdlib>
+#include <iostream>
 #include <cstring>
 #include "myexceptions.h"
 
@@ -31,8 +32,9 @@ class DynamicVector {
 		
 
 		void remove(int index, int elements_to_delete) {
-			if (index + elements_to_delete > number_of_elements)
-				throw "IndexError: Can't delete elements outside of range!\n";
+			if (index + elements_to_delete > number_of_elements) {
+                elements_to_delete = number_of_elements - index;
+            }
 
 			T* new_array = new T[number_of_elements-elements_to_delete+1];
 			for (int i = 0; i < index; i++)
@@ -64,8 +66,8 @@ class DynamicVector {
 
 		T element(int index) {
 			if (index >= number_of_elements) {
-				IndexError ie("IndexError: Can't delete elements outside of range!\n");
-				throw ie;		
+                std::cout << "IndexError: Can't delete elements outside of range!\n";
+                return array[0];
 			}
 
 			return array[index];
@@ -74,8 +76,8 @@ class DynamicVector {
 
 		T& operator[](int index) {
 			if (index >= number_of_elements) {
-				IndexError ie("IndexError: Can't delete elements outside of range!\n");
-				throw ie;		
+				std::cout << "IndexError: Can't delete elements outside of range!\n";
+				return array[0];
 			}
 
 			return array[index];
@@ -91,11 +93,6 @@ class DynamicVector {
 			delete[] array;
 		}
 
-		/**
-	        ~DynamicVector() {	
-        	delete[] array;
-        }
-		**/
 };
 
 

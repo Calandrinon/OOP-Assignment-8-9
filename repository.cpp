@@ -10,8 +10,8 @@ Repository::Repository() {
 void Repository::add(Recording r) {
 	for (int i = 0; i < container.size(); i++) {
 		if (container[i].get_title() == r.get_title()) {
-			cout << "Can't add duplicate elements!\n";
-			return;
+			RepositoryException re("Can't add duplicate elements!\n");
+			throw re;
 		}
 	}
 
@@ -19,7 +19,7 @@ void Repository::add(Recording r) {
 }
 
 
-DynamicVector<Recording> Repository::get_container() {
+vector<Recording> Repository::get_container() {
 	return container;
 }
 
@@ -27,7 +27,7 @@ DynamicVector<Recording> Repository::get_container() {
 void Repository::remove(string title) {
 	for (int i = 0; i < container.size(); i++) {
 		if (container[i].get_title() == title) {
-			container.remove(i, 1);
+			container.erase(container.begin()+i);
 			return;
 		}
 	}
@@ -35,8 +35,6 @@ void Repository::remove(string title) {
 
 
 Repository::~Repository() {
-	container.free();
-	watch_list.free();
 }
 
 
@@ -71,6 +69,6 @@ void Repository::save() {
 }
 
 
-DynamicVector<Recording> Repository::get_watchlist() {
+vector<Recording> Repository::get_watchlist() {
 	return watch_list;
 }

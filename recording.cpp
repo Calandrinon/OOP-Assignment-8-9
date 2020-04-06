@@ -43,24 +43,6 @@ void Recording::set_title(std::string new_title) {
 }
 
 
-void Recording::set_location(std::string new_location) {
-	location = new_location;
-}
-
-
-void Recording::set_time_of_creation(std::string new_time) {
-	time_of_creation = new_time;
-}	
-
-
-void Recording::set_times_accessed(int new_times_accessed) {
-	times_accessed = new_times_accessed;
-}
-
-
-void Recording::set_footage_preview(std::string new_footage_preview) {
-	footage_preview = new_footage_preview;
-}
 
 
 std::string Recording::get_as_string() {

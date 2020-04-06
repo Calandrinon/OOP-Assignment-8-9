@@ -2,7 +2,8 @@
 #include <string>
 #include <exception>
 #include "myexceptions.h"
-#include "dynamicvector.h"
+//#include "dynamicvector.h"
+#include <vector>
 using namespace std;
 
 UI::UI(Service* service) {
@@ -17,46 +18,42 @@ void UI::exit() {
 }
 
 
-DynamicVector<string> UI::tokenize(string line, char delimiter) {
+vector<string> UI::tokenize(string line, char delimiter) {
 	return service->tokenize(line, delimiter);
 }
 
 
 string UI::get_command_name(string full_command) {
-	DynamicVector<string> tokens = tokenize(full_command, ' ');
+	vector<string> tokens = tokenize(full_command, ' ');
 
 	if (tokens.size() == 0) {
-		tokens.free();
 		return "-1";
 	}
 
 	string command_name = tokens[0];
-	tokens.free();
-	return command_name; 
+	return command_name;
 }
 
 
 void UI::add() {
-	DynamicVector<string> tokens = tokenize(this->last_command, ',');
+	vector<string> tokens = tokenize(this->last_command, ',');
 
 	if (tokens.size() != 5) {
 		cout << "The command add takes 5 parameters: add title, location, timeOfCreation, timesAccessed, footagePreview\n";
-		tokens.free();	
 		return;
 	}
 
-	for (int i = 0; i < tokens.size(); i++) 
+	for (int i = 0; i < tokens.size(); i++)
 		tokens[i] = service->strip(tokens[i]);
 
 	tokens[0].erase(0, 4);  // the title without the 'add' command name
 	service->add(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4]);
-	tokens.free();
 }
 
 
 void UI::list() {
-	DynamicVector<Recording> container = service->get_repository_container();
-	DynamicVector<string> tokens = tokenize(this->last_command, ',');
+	vector<Recording> container = service->get_repository_container();
+	vector<string> tokens = tokenize(this->last_command, ',');
 	string location;
 	int times_accessed;
 
@@ -70,7 +67,6 @@ void UI::list() {
 		try {
 			times_accessed = stoi(tokens[1]);
 		} catch (invalid_argument ie) {
-			tokens.free();
 			throw ie;
 		}
 	} else if (tokens.size() != 1) {
@@ -86,32 +82,27 @@ void UI::list() {
 		}
 		cout << container[i].get_as_string() << "\n";
 	}
-	tokens.free();
 }
 
 
 void UI::remove() {
-	DynamicVector<string> tokens = tokenize(this->last_command, ' ');
+	vector<string> tokens = tokenize(this->last_command, ' ');
 
 	if (!service->search(tokens[1])) {
 		cout << "The element doesn't exist!\n";
-		tokens.free();
 		return;
 	}
 
 	string title = tokens[1];
 	service->remove(title);
-
-	tokens.free();
 }
 
 
 void UI::update() {
-	DynamicVector<string> tokens = service->tokenize(this->last_command, ',');
+	vector<string> tokens = service->tokenize(this->last_command, ',');
 
 	if (tokens.size() != 5) {
 		cout << "The command update takes 5 parameters: add title, new_location, new_timeOfCreation, new_timesAccessed, new_footagePreview\n";
-		tokens.free();
 		return;
 	}
 
@@ -122,27 +113,22 @@ void UI::update() {
 
 	if (!service->search(tokens[0])) {
 		cout << "The element doesn't exist!\n";
-		tokens.free();
 		return;
 	}
 
-	service->update(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4]);	
-
-	tokens.free();
+	service->update(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4]);
 }
 
 
 void UI::change_mode() {
-	DynamicVector<string> tokens = tokenize(this->last_command, ' ');
+	vector<string> tokens = tokenize(this->last_command, ' ');
 
 	if (tokens.size() != 2 || tokens[1].size() > 1 || !(tokens[1][0] == 'A' || tokens[1][0] == 'B')) {
 		cout << "The command mode takes only one parameter with the values A or B!\n";
-		tokens.free();
 		return;
 	}
 
 	this->security_clearance_mode = tokens[1][0];
-	tokens.free();
 }
 
 
@@ -173,7 +159,7 @@ void UI::save() {
 
 
 void UI::mylist() {
-	DynamicVector<Recording> watch_list = service->get_watchlist();
+	vector<Recording> watch_list = service->get_watchlist();
 
 	for (int i = 0; i < watch_list.size(); i++) {
 		cout << watch_list[i].get_as_string() << "\n";
@@ -192,6 +178,13 @@ void UI::run() {
 	service->add("anomaly4", "deck D sector x1423", "01-10-2000", "12", "prev654.mp4");
 	service->add("anomaly2", "deck E sector x20", "01-10-2000", "2", "prev124.mp4");
 	service->add("anomaly3", "deck F sector x1422", "02-10-2000", "3", "prev125.mp4");
+	service->add("1", "deck D sector x1423", "01-10-2000", "5", "prev1.mp4");
+	service->add("4", "deck D sector x1423", "01-10-2000", "12", "prev4.mp4");
+	service->add("3", "deck E sector x20", "01-10-2000", "2", "prev3.mp4");
+	service->add("17", "deck F sector x1422", "02-10-2000", "3", "prev17.mp4");
+	service->add("13", "deck D sector x1423", "01-10-2000", "12", "prev13.mp4");
+	service->add("20", "deck E sector x20", "01-10-2000", "2", "prev20.mp4");
+	service->add("5", "deck F sector x1422", "02-10-2000", "3", "prev5.mp4");
 	help();	
 
 	while (running) {
@@ -218,8 +211,6 @@ void UI::run() {
 					cout << "InvalidArgumentException: stoi can't convert string with letters into an int!\n";
 				} catch(RepositoryException re) {
 					cout << re.message;
-				} catch(IndexError ie) {
-					cout << ie.message;
 				}
 			}
 		}

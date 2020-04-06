@@ -21,6 +21,10 @@ class Tests {
 		void test_service_update();
 		void test_dynamic_vector_assignment_operator();
 		void test_dynamic_vector_overloaded_subscript();
+        void testRepositoryAdd__duplicateElement__doesntAddElement();
+        void testRepositoryNext__averageCase__incrementsToNextElement();
+        void testRepositorySave__averageCase__elementAddedToWatchlist();
+        void testDynamicVectorSubscript__outOfRange__throwsException();
 };
 
 #endif

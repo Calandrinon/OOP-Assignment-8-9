@@ -11,19 +11,19 @@ Service::Service(Repository* repository) {
 }
 
 
-DynamicVector<std::string> Service::tokenize(std::string line, char delimiter) {
+vector<string> Service::tokenize(std::string line, char delimiter) {
 	/**
 	 * 
-	 * Splits a string into tokens by using a delimiter and returns them in a DynamicVector
+	 * Splits a string into tokens by using a delimiter and returns them in a std::vector
 	 * 
 	 * Input:
 	 * 		- line: string
 	 * 		- delimiter: character
 	 * 
 	 * Output:
-	 * 		- tokens: DynamicVector
+	 * 		- tokens: std::vector
 	 **/
-	DynamicVector<string> tokens;
+	vector<string> tokens;
 
 	stringstream stream(line);
 	string token;
@@ -66,7 +66,7 @@ void Service::validate_time_of_creation(string time_of_creation) {
 	 * Input:
 	 * 		- time_of_creation: a date given as a string
 	 **/
-	DynamicVector<string> tokens = tokenize(time_of_creation, '-');
+	vector<string> tokens = tokenize(time_of_creation, '-');
 
 	if (tokens.size() != 3) {
 		CommandFormatException command_format_exception("Incorrect time of creation format!\n");
@@ -82,7 +82,6 @@ void Service::validate_time_of_creation(string time_of_creation) {
 		throw command_format_exception; 
 	} 
 
-	tokens.free();
 	//Conversion is not necessary but for validating the date(reassuring the fact that
 	//the date is a series of numbers) it is useful because it throws an invalid_argument
 	//exception in case the date string is just formed of letters.
@@ -116,9 +115,9 @@ void Service::add(string title, string location, string time_of_creation, string
 }
 
 
-DynamicVector<Recording> Service::get_repository_container() {
+vector<Recording> Service::get_repository_container() {
 	/**
-	 * Gets the contents of the custom-made DynamicVector from the repository.
+	 * Gets the contents of the custom-made std::vector from the repository.
 	 * 
 	 **/
 	return repository->get_container();
@@ -179,7 +178,7 @@ void Service::save() {
 }
 
 
-DynamicVector<Recording> Service::get_watchlist() {
+vector<Recording> Service::get_watchlist() {
 	return repository->get_watchlist();
 }
 

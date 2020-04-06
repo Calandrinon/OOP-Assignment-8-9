@@ -12,7 +12,7 @@ class Service {
 
 	public:
 		Service(Repository*);
-		DynamicVector<string> tokenize(string line, char delimiter);
+		vector<string> tokenize(string line, char delimiter);
 		string strip(string str);
 		void validate_location(string location);
 		void validate_time_of_creation(string time_of_creation);
@@ -22,8 +22,8 @@ class Service {
 		bool search(string title);
 		string next();
 		void save();
-		DynamicVector<Recording> get_watchlist();
+		vector<Recording> get_watchlist();
 		void update(string title, string location, string time_of_creation, string times_accessed, string footage_preview);
-		DynamicVector<Recording> get_repository_container();
+		vector<Recording> get_repository_container();
 		~Service();
 };

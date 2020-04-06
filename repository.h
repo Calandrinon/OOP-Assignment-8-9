@@ -7,18 +7,18 @@ using namespace std;
 
 class Repository {
 	private:
-		DynamicVector<Recording> container;	
-		DynamicVector<Recording> watch_list;
+		vector<Recording> container;
+		vector<Recording> watch_list;
 		int selected_recording;
 
 	public:
 		Repository();
 		void add(Recording r);
-		DynamicVector<Recording> get_container();
+		vector<Recording> get_container();
 		void remove(string title);
 		string next();
 		void save();
-		DynamicVector<Recording> get_watchlist();
+		vector<Recording> get_watchlist();
 		bool search(string title);
 		~Repository();
 };
