@@ -8,8 +8,8 @@ Repository::Repository() {
 
 
 void Repository::add(Recording r) {
-	for (int i = 0; i < container.size(); i++) {
-		if (container[i].get_title() == r.get_title()) {
+	for (Recording& recording: container){
+		if (recording.get_title() == r.get_title()) {
 			RepositoryException re("Can't add duplicate elements!\n");
 			throw re;
 		}
@@ -25,9 +25,9 @@ vector<Recording> Repository::get_container() {
 
 
 void Repository::remove(string title) {
-	for (int i = 0; i < container.size(); i++) {
-		if (container[i].get_title() == title) {
-			container.erase(container.begin()+i);
+	for (auto it = container.begin(); it != container.end(); it++) {
+		if (it->get_title() == title) {
+			container.erase(it);
 			return;
 		}
 	}
@@ -39,8 +39,8 @@ Repository::~Repository() {
 
 
 bool Repository::search(string title) {
-	for (int i = 0; i < container.size(); i++) {
-		if (container[i].get_title() == title) {
+	for (Recording& recording: container) {
+		if (recording.get_title() == title) {
 			return true;
 		}
 	}
