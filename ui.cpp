@@ -1,9 +1,12 @@
 #include "ui.h"
+#include <iostream>
 #include <string>
 #include <exception>
 #include "myexceptions.h"
 //#include "dynamicvector.h"
 #include <vector>
+#include <algorithm>
+
 using namespace std;
 
 UI::UI(Service* service) {
@@ -66,20 +69,29 @@ void UI::list() {
 		location = tokens[0];
 		try {
 			times_accessed = stoi(tokens[1]);
-		} catch (invalid_argument ie) {
+		} catch (invalid_argument& ie) {
 			throw ie;
 		}
+
+		auto display_recordings = [location, times_accessed](Recording recording){
+		    if (recording.get_location() == location && recording.get_times_accessed() < times_accessed) cout << recording.get_as_string() << "\n";};
+		for_each(container.begin(), container.end(), display_recordings);
+
+		return;
 	} else if (tokens.size() != 1) {
 		cout << "The command list should take no parameters or 2 parameters. Check help\n";
 		return;
 	}
 
 	for (int i = 0; i < container.size(); i++) {
+	    /**
+	     * replaced this with the for_each from line 78
 		if (tokens.size() == 2) {
 			if (container[i].get_location() == location && container[i].get_times_accessed() < times_accessed)
 				cout << container[i].get_as_string() << "\n";
 			continue;
 		}
+	    **/
 		cout << container[i].get_as_string() << "\n";
 	}
 }
