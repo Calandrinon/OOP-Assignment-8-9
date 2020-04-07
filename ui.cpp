@@ -46,8 +46,8 @@ void UI::add() {
 		return;
 	}
 
-	for (int i = 0; i < tokens.size(); i++)
-		tokens[i] = service->strip(tokens[i]);
+	for (string& token: tokens)
+		token = service->strip(token);
 
 	tokens[0].erase(0, 4);  // the title without the 'add' command name
 	service->add(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4]);
@@ -61,8 +61,8 @@ void UI::list() {
 	int times_accessed;
 
 	if (tokens.size() == 2) {
-		for (int i = 0; i < tokens.size(); i++)
-			tokens[i] = service->strip(tokens[i]);
+		for (string& token: tokens)
+			token = service->strip(token);
 
 		tokens[0].erase(0, 5);
 
@@ -83,17 +83,8 @@ void UI::list() {
 		return;
 	}
 
-	for (int i = 0; i < container.size(); i++) {
-	    /**
-	     * replaced this with the for_each from line 78
-		if (tokens.size() == 2) {
-			if (container[i].get_location() == location && container[i].get_times_accessed() < times_accessed)
-				cout << container[i].get_as_string() << "\n";
-			continue;
-		}
-	    **/
-		cout << container[i].get_as_string() << "\n";
-	}
+	for (Recording& recording: container)
+		cout << recording.get_as_string() << "\n";
 }
 
 
@@ -118,8 +109,8 @@ void UI::update() {
 		return;
 	}
 
-	for (int i = 0; i < tokens.size(); i++) 
-		tokens[i] = service->strip(tokens[i]);
+	for (string& token: tokens)
+		token = service->strip(token);
 
 	tokens[0].erase(0, 7);  // the title without the 'add' command name
 
@@ -173,9 +164,8 @@ void UI::save() {
 void UI::mylist() {
 	vector<Recording> watch_list = service->get_watchlist();
 
-	for (int i = 0; i < watch_list.size(); i++) {
-		cout << watch_list[i].get_as_string() << "\n";
-	}
+	for (Recording& recording: watch_list)
+		cout << recording.get_as_string() << "\n";
 }
 
 
@@ -207,7 +197,8 @@ void UI::run() {
 		bool command_found = false;
 		string command_name = get_command_name(command);
 
-		for (int i = 0; i < number_of_commands && !command_found; i++) {
+		int i = 0;
+		while (i < number_of_commands && !command_found) {
 			if (commands[i] == command_name) {
 				command_found = true;
 				if (security_clearance_mode == 'B' && permissions[i] == "admin") {
@@ -225,6 +216,7 @@ void UI::run() {
 					cout << re.message;
 				}
 			}
+			i++;
 		}
 
 		if (!command_found) {
