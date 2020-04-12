@@ -24,11 +24,25 @@ Tests::Tests() {
     testRepositoryAdd__duplicateElement__doesntAddElement();
     testRepositoryNext__averageCase__incrementsToNextElement();
     testRepositorySave__averageCase__elementAddedToWatchlist();
+    testFileRepository__addingAnElement__success();
+    testFileRepository__addingADuplicateElement__success();
+    testFileRepository__removingAnElement__success();
+    testFileRepository__searchingAnElement__success();
+    testFileRepository__searchingAnNonexistentElement__returnsFalse();
+    testFileRepository__removingANonexistingElement__fails();
+    testFileRepository__getNextElement__success();
+    testFileRepository__saveElement__success();
+    testFileRepository__getFilename__success();
+    testRepositorySearch__searchingNonexistentElement__fails();
+    testServiceGetFileRepoFilename__getsFilename__success();
+    testRepositorySetFileRepoFilename__setsFilename__success();
+    testServiceSetFileRepoFilename__setsFilename__success();
+    testRepositoryGetFileRepoFilename__getsFilename__success();
 }
 
 
 void Tests::testRepositorySave__averageCase__elementAddedToWatchlist() {
-    Repository repository;
+    MemoryRepository repository;
 
     Recording recording("anomaly","deck D sector X1423","01-13-3248",5,"prev123.mp15");
     repository.add(recording);
@@ -40,12 +54,12 @@ void Tests::testRepositorySave__averageCase__elementAddedToWatchlist() {
     Recording watchlist_element = watchlist[0];
     assert(watchlist_element.get_title() == recording.get_title());
 
-    cout << "Repository save operation test passed!\n";
+    cout << "MemoryRepository save operation test passed!\n";
 }
 
 
 void Tests::testRepositoryNext__averageCase__incrementsToNextElement() {
-    Repository repository;
+    MemoryRepository repository;
 
     Recording recording("anomaly","deck D sector X1423","01-13-3248",5,"prev123.mp15");
     repository.add(recording);
@@ -55,12 +69,12 @@ void Tests::testRepositoryNext__averageCase__incrementsToNextElement() {
 
     assert(element == "anomaly2, 1, 01-13-3248, 5, prev124.mp15");
 
-    cout << "Repository next operation test passed!\n";
+    cout << "MemoryRepository next operation test passed!\n";
 }
 
 
 void Tests::testRepositoryAdd__duplicateElement__doesntAddElement() {
-    Repository repository;
+    MemoryRepository repository;
 
     Recording recording("anomaly","deck D sector X1423","01-13-3248",5,"prev123.mp15");
     repository.add(recording);
@@ -74,7 +88,7 @@ void Tests::testRepositoryAdd__duplicateElement__doesntAddElement() {
     vector<Recording> container = repository.get_container();
     assert(container.size() == 1);
 
-    cout << "Repository duplicate element test passed!\n";
+    cout << "MemoryRepository duplicate element test passed!\n";
 }
 
 
@@ -163,7 +177,7 @@ void Tests::test_recording_setters() {
 
 
 void Tests::test_repository_add() {
-	Repository repository;		
+	MemoryRepository repository;		
 
 	Recording recording("anomaly","deck D sector X1423","01-13-3248",5,"prev123.mp15"); 	
 	repository.add(recording);
@@ -171,12 +185,12 @@ void Tests::test_repository_add() {
 	vector<Recording> container = repository.get_container();
 	assert(container[0].get_title() == recording.get_title());
 
-	cout << "Repository add operation test passed!\n";
+	cout << "MemoryRepository add operation test passed!\n";
 }
 
 
 void Tests::test_service_add() {
-	Repository repository;
+	MemoryRepository repository;
 	Service service(&repository);
 
 	service.add("anomaly","deck D sector X1423","01-13-3248","5","prev123.mp15");
@@ -189,7 +203,7 @@ void Tests::test_service_add() {
 
 
 void Tests::test_repository_delete() {
-	Repository repository;
+	MemoryRepository repository;
 	Recording recording("anomaly","deck D sector X1423","01-13-3248",5,"prev123.mp15"); 	
 	repository.add(recording);
 	assert(repository.get_container().size() == 1);
@@ -197,12 +211,12 @@ void Tests::test_repository_delete() {
 	repository.remove("anomaly");
 	assert(repository.get_container().size() == 0);
 
-	cout << "Repository delete operation test passed!\n";
+	cout << "MemoryRepository delete operation test passed!\n";
 }
 
 
 void Tests::test_service_delete() {
-	Repository repository;
+	MemoryRepository repository;
 	Service service(&repository);
 
 	service.add("anomaly","deck D sector X1423","01-13-3248","5","prev123.mp15");
@@ -216,18 +230,18 @@ void Tests::test_service_delete() {
 
 
 void Tests::test_repository_search() {
-	Repository repository;
+	MemoryRepository repository;
 	Recording recording("anomaly","deck D sector X1423","01-13-3248",5,"prev123.mp15"); 	
 	repository.add(recording);
 
 	assert(repository.search("anomaly"));
 
-	cout << "Repository search operation test passed!\n";
+	cout << "MemoryRepository search operation test passed!\n";
 }
 
 
 void Tests::test_service_update() {
-	Repository repository;
+	MemoryRepository repository;
 	Service service(&repository);
 
 	service.add("anomaly","deck D sector X1423","01-13-3248","5","prev123.mp15");
@@ -265,4 +279,203 @@ void Tests::test_dynamic_vector_overloaded_subscript() {
 	vector.free();
 
 	cout << "Dynamic vector overloaded subscript test passed!\n";
+}
+
+
+void Tests::testFileRepository__searchingAnElement__success() {
+    FileRepository* repository = new FileRepository("test.in");
+
+    Recording recording("1", "1", "01-01-2001", 1, "1.mp1");
+    repository->add(recording);
+
+    assert(repository->search("1") == true);
+
+    delete repository;
+    cout << "File repository searching operation test passed!\n";
+}
+
+
+void Tests::testFileRepository__addingAnElement__success() {
+    FileRepository* repository = new FileRepository("test.in");
+
+    Recording recording("1", "1", "01-01-2001", 1, "1.mp1");
+    repository->add(recording);
+
+    assert(repository->search("1") == true);
+
+    delete repository;
+    cout << "File repository add operation test passed!\n";
+}
+
+
+void Tests::testFileRepository__removingAnElement__success() {
+    FileRepository* repository = new FileRepository("test.in");
+
+    Recording recording("1", "1", "01-01-2001", 1, "1.mp1");
+    Recording recording2("2", "2", "02-02-2002", 2, "2.mp1");
+    repository->add(recording);
+    repository->add(recording2);
+    assert(repository->get_number_of_elements() == 2);
+
+    repository->remove("1");
+    assert(repository->get_number_of_elements() == 1);
+
+    delete repository;
+    cout << "File repository remove operation test passed!\n";
+}
+
+
+void Tests::testFileRepository__addingADuplicateElement__success() {
+    FileRepository* repository = new FileRepository("test.in");
+
+    Recording recording("1", "1", "01-01-2001", 1, "1.mp1");
+    Recording recording2("1", "1", "01-01-2001", 1, "1.mp1");
+    repository->add(recording);
+
+    try {
+        repository->add(recording2);
+    } catch (std::exception& exc) {
+
+    }
+
+    assert(repository->search("1") == true);
+
+    delete repository;
+    cout << "File repository duplicate element addition test passed!\n";
+}
+
+
+
+void Tests::testFileRepository__searchingAnNonexistentElement__returnsFalse() {
+    FileRepository* repository = new FileRepository("test.in");
+
+    assert(repository->search("5") == false);
+
+    delete repository;
+    cout << "File repository unexistent searched element test passed!\n";
+}
+
+
+void Tests::testFileRepository__removingANonexistingElement__fails() {
+    FileRepository* repository = new FileRepository("test.in");
+
+    Recording recording("1", "1", "01-01-2001", 1, "1.mp1");
+    Recording recording2("2", "2", "02-02-2002", 2, "2.mp1");
+    repository->add(recording);
+    repository->add(recording2);
+    assert(repository->get_number_of_elements() == 2);
+
+    repository->remove("abc");
+    assert(repository->get_number_of_elements() == 2);
+
+    delete repository;
+    cout << "File repository unexisting element removal test passed!\n";
+}
+
+
+void Tests::testFileRepository__getNextElement__success() {
+    FileRepository* repository = new FileRepository("test.in");
+
+    Recording recording("1", "1", "01-01-2001", 1, "1.mp1");
+    Recording recording2("2", "2", "02-02-2002", 2, "2.mp1");
+    repository->add(recording);
+    repository->add(recording2);
+    assert(repository->get_number_of_elements() == 2);
+
+    assert(repository->next() == "2, 2, 02-02-2002, 2, 2.mp1");
+    assert(repository->next() == "1, 1, 01-01-2001, 1, 1.mp1");
+    assert(repository->next() == "2, 2, 02-02-2002, 2, 2.mp1");
+
+    delete repository;
+    cout << "File repository next operation test passed!\n";
+}
+
+
+void Tests::testFileRepository__saveElement__success() {
+    FileRepository* repository = new FileRepository("test.in");
+
+    try {
+        repository->save();
+    } catch (std::exception& exc) {}
+
+    Recording recording("1", "1", "01-01-2001", 1, "1.mp1");
+    Recording recording2("2", "2", "02-02-2002", 2, "2.mp1");
+
+    repository->add(recording);
+    repository->add(recording2);
+    assert(repository->get_number_of_elements() == 2);
+
+    repository->save();
+    vector<Recording> watchlist = repository->get_watchlist();
+    assert(watchlist.size() == 1);
+
+    delete repository;
+    cout << "File repository save operation test passed!\n";
+}
+
+
+void Tests::testFileRepository__getFilename__success() {
+    FileRepository* repository = new FileRepository("test.in");
+
+    assert(repository->get_filename() == "test.in");
+
+    delete repository;
+    cout << "File repository save operation test passed!\n";
+}
+
+
+void Tests::testRepositorySearch__searchingNonexistentElement__fails() {
+    MemoryRepository* repository = new MemoryRepository();
+
+    assert(repository->search("abc") == false);
+
+    delete repository;
+    cout << "File repository nonexistent element search test passed!\n";
+}
+
+
+void Tests::testServiceGetFileRepoFilename__getsFilename__success() {
+    FileRepository* repository = new FileRepository("test.in");
+    Service* service = new Service(repository);
+
+    assert(service->get_file_repository_filename() == "test.in");
+
+    delete repository;
+    delete service;
+    cout << "Service&fileRepo get filename test passed!\n";
+}
+
+
+void Tests::testServiceSetFileRepoFilename__setsFilename__success() {
+    FileRepository* repository = new FileRepository("test.in");
+    Service* service = new Service(repository);
+
+    assert(service->get_file_repository_filename() == "test.in");
+    service->set_file_repository_filename("test2.in");
+    assert(service->get_file_repository_filename() == "test2.in");
+
+    delete repository;
+    delete service;
+    cout << "Service&fileRepo set filename test passed!\n";
+}
+
+
+void Tests::testRepositorySetFileRepoFilename__setsFilename__success() {
+    FileRepository* repository = new FileRepository("test.in");
+
+    repository->set_filename("test2.in");
+    assert(repository->get_filename() == "test2.in");
+
+    delete repository;
+    cout << "FileRepo set filename test passed!\n";
+}
+
+
+void Tests::testRepositoryGetFileRepoFilename__getsFilename__success() {
+    FileRepository* repository = new FileRepository("test.in");
+
+    assert(repository->get_filename() == "test.in");
+
+    delete repository;
+    cout << "FileRepo get filename test passed!\n";
 }

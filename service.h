@@ -7,8 +7,10 @@ using namespace std;
 
 class Service {
 	private:
-		Repository* repository;
-		Repository* watch_list;
+		MemoryRepository* repository;
+		FileRepository* file_repository;
+		MemoryRepository* watch_list;
+		bool has_file_repository;
 
 	public:
 		Service(Repository*);
@@ -25,5 +27,8 @@ class Service {
 		vector<Recording> get_watchlist();
 		void update(string title, string location, string time_of_creation, string times_accessed, string footage_preview);
 		vector<Recording> get_repository_container();
+		bool does_service_have_file_repository();
+		string get_file_repository_filename();
+		void set_file_repository_filename(string new_filename);
 		~Service();
 };

@@ -6,8 +6,27 @@
 using namespace std;
 
 Service::Service(Repository* repository) {
-	this->repository = repository;
-	this->watch_list = new Repository();
+    auto memory_repository = dynamic_cast<MemoryRepository*>(repository);
+
+    if (memory_repository) {
+        this->repository = memory_repository;
+        this->has_file_repository = false;
+    } else {
+        this->file_repository = dynamic_cast<FileRepository*>(repository);
+        this->has_file_repository = true;
+    }
+
+	this->watch_list = new MemoryRepository();
+}
+
+
+bool Service::does_service_have_file_repository() {
+    return has_file_repository;
+}
+
+
+string Service::get_file_repository_filename() {
+    return file_repository->get_filename();
 }
 
 
@@ -110,8 +129,12 @@ void Service::add(string title, string location, string time_of_creation, string
 	validate_time_of_creation(time_of_creation);
 	validate_times_accessed(times_accessed);
 
-	Recording recording(title, location, time_of_creation, stoi(times_accessed), footage_preview); 	
-	repository->add(recording);
+	Recording recording(title, location, time_of_creation, stoi(times_accessed), footage_preview);
+	if (!has_file_repository) {
+        repository->add(recording);
+	} else {
+	    file_repository->add(recording);
+	}
 }
 
 
@@ -120,12 +143,18 @@ vector<Recording> Service::get_repository_container() {
 	 * Gets the contents of the custom-made std::vector from the repository.
 	 * 
 	 **/
-	return repository->get_container();
+    if (!has_file_repository) {
+        return repository->get_container();
+    }
 }
 
 
 bool Service::search(string title) {
-	return repository->search(title);
+    if (!has_file_repository) {
+        return repository->search(title);
+    } else {
+        return file_repository->search(title);
+    }
 }
 
 
@@ -137,8 +166,11 @@ void Service::remove(string title) {
 	 * Input:
 	 * 		- title: string
 	 **/
-		
-	repository->remove(title);
+	if (!has_file_repository) {
+        repository->remove(title);
+    } else {
+	    file_repository->remove(title);
+	}
 }
 
 
@@ -157,32 +189,56 @@ void Service::update(string title, string location, string time_of_creation, str
 	validate_time_of_creation(time_of_creation);
 	validate_times_accessed(times_accessed);
 
-	if (!repository->search(title)) {
+	if (!has_file_repository && !repository->search(title)) {
 		RepositoryException re("RepositoryException: The element cannot be updated because it doesn't exist!\n");
 		throw re;
+	} else if (has_file_repository && !file_repository->search(title)) {
+        RepositoryException re("RepositoryException: The element cannot be updated because it doesn't exist!\n");
+        throw re;
 	}
-	
-	repository->remove(title);
-	Recording recording(title, location, time_of_creation, stoi(times_accessed), footage_preview); 	
-	repository->add(recording);
+
+	if (!has_file_repository)
+	    repository->remove(title);
+    else
+        file_repository->remove(title);
+
+	Recording recording(title, location, time_of_creation, stoi(times_accessed), footage_preview);
+	if (!has_file_repository)
+	    repository->add(recording);
+    else
+        file_repository->add(recording);
 }
 
 
 string Service::next() {
-	return repository->next();
+    if (!has_file_repository)
+	    return repository->next();
+    else
+        return file_repository->next();
 }
 
 
 void Service::save() {
-	repository->save();
+    if (!has_file_repository)
+	    repository->save();
+    else
+        file_repository->save();
 }
 
 
 vector<Recording> Service::get_watchlist() {
-	return repository->get_watchlist();
+    if (!has_file_repository)
+	    return repository->get_watchlist();
+    else
+        return file_repository->get_watchlist();
 }
 
 
 Service::~Service() {
 	delete watch_list;
+}
+
+
+void Service::set_file_repository_filename(string new_filename) {
+    file_repository->set_filename(new_filename);
 }

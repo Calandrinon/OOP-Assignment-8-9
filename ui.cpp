@@ -1,5 +1,6 @@
 #include "ui.h"
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <exception>
 #include "myexceptions.h"
@@ -55,6 +56,17 @@ void UI::add() {
 
 
 void UI::list() {
+    if (service->does_service_have_file_repository()) {
+        ifstream in(service->get_file_repository_filename());
+        string element;
+
+        while (getline(in, element)) {
+            cout << element << "\n";
+        }
+
+        return;
+    }
+
 	vector<Recording> container = service->get_repository_container();
 	vector<string> tokens = tokenize(this->last_command, ',');
 	string location;
@@ -169,10 +181,20 @@ void UI::mylist() {
 }
 
 
+void UI::set_file_location() {
+    string command_name = this->last_command.substr(0, this->last_command.find(" "));
+    string file_path = this->last_command.substr(this->last_command.find(" ")+1, this->last_command.size()-1);
+    //file_path = service->strip(file_path);
+
+    service->set_file_repository_filename(file_path);
+    cout << service->get_file_repository_filename() << "\n";
+}
+
+
 void UI::run() {
-	string commands[] = {"exit", "add", "list", "delete", "update", "mode", "help", "next", "save", "mylist"};
-	string permissions[] = {"all", "admin", "all", "admin", "admin", "admin", "all", "all", "all", "all"};
-	void (UI::*func[])() = {&UI::exit, &UI::add, &UI::list, &UI::remove, &UI::update, &UI::change_mode, &UI::help, &UI::next, &UI::save, &UI::mylist};
+	string commands[] = {"exit", "add", "list", "delete", "update", "mode", "help", "next", "save", "mylist", "fileLocation"};
+	string permissions[] = {"all", "admin", "all", "admin", "admin", "admin", "all", "all", "all", "all", "admin"};
+	void (UI::*func[])() = {&UI::exit, &UI::add, &UI::list, &UI::remove, &UI::update, &UI::change_mode, &UI::help, &UI::next, &UI::save, &UI::mylist, &UI::set_file_location};
 	int number_of_commands = sizeof(commands)/sizeof(commands[0]);
 	string command;
 
@@ -187,7 +209,7 @@ void UI::run() {
 	service->add("13", "deck D sector x1423", "01-10-2000", "12", "prev13.mp4");
 	service->add("20", "deck E sector x20", "01-10-2000", "2", "prev20.mp4");
 	service->add("5", "deck F sector x1422", "02-10-2000", "3", "prev5.mp4");
-	help();	
+	help();
 
 	while (running) {
 		cout << ">>";

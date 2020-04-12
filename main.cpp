@@ -6,11 +6,12 @@
 int main() {
 	Tests();
 
-	Repository* repository = new Repository();
+	Repository* repository = new FileRepository("in.in");
+	//Repository* repository = new MemoryRepository();
 	Service* service = new Service(repository);
-	UI ui = UI(service);	
+	UI ui = UI(service);
 	ui.run();
-	
+
 	delete repository;
 	delete service;
 	//_CrtDumpMemoryLeaks();
