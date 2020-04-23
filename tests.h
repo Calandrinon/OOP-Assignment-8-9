@@ -38,6 +38,11 @@ class Tests {
         void testServiceSetFileRepoFilename__setsFilename__success();
         void testRepositorySetFileRepoFilename__setsFilename__success();
         void testRepositoryGetFileRepoFilename__getsFilename__success();
+        void testCommandFormatException();
+        void testFileRepoExistenceInService();
+        void testStrip();
+        void testTimeOfCreationValidation__incorrectFormatting__throwsException();
+        void testTimeOfCreationValidation__invalidDate__throwsException();
 };
 
 #endif

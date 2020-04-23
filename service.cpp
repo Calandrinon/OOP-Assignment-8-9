@@ -94,7 +94,7 @@ void Service::validate_time_of_creation(string time_of_creation) {
 
 	int month = stoi(tokens[0]);
 	int day = stoi(tokens[1]);
-	int year = stoi(tokens[2]);
+	stoi(tokens[2]); //the year
 
 	if (month < 1 || month > 12 || day < 1 || day > 31) {
 		CommandFormatException command_format_exception("Incorrect date!\n");
@@ -114,7 +114,7 @@ void Service::validate_times_accessed(string times_accessed) {
 	 * Input:
 	 * 		- times_accessed: a string
 	 **/
-	int times = stoi(times_accessed);
+	 stoi(times_accessed);
 }
 
 
@@ -146,6 +146,9 @@ vector<Recording> Service::get_repository_container() {
     if (!has_file_repository) {
         return repository->get_container();
     }
+
+    vector<Recording> error;
+    return error; //this was written to avoid compiler warnings about "non-void function which returns nothing".
 }
 
 
@@ -175,32 +178,33 @@ void Service::remove(string title) {
 
 
 void Service::update(string title, string location, string time_of_creation, string times_accessed, string footage_preview) {
-	/**
-	 * 
-	 * Updates the details of a recording in the repository.
-	 * In case the recording with the specified title does not exist, the method throws
-	 * a RepositoryException.
-	 * 
-	 * Input:
-	 * 		- title, location, time_of_creation, times_accessed, footage_preview: strings
-	 * Throws:
-	 * 		- RepositoryException: in case the recording with the given title doesn't exist
-	 **/
-	validate_time_of_creation(time_of_creation);
-	validate_times_accessed(times_accessed);
+    /**
+     *
+     * Updates the details of a recording in the repository.
+     * In case the recording with the specified title does not exist, the method throws
+     * a RepositoryException.
+     *
+     * Input:
+     * 		- title, location, time_of_creation, times_accessed, footage_preview: strings
+     * Throws:
+     * 		- RepositoryException: in case the recording with the given title doesn't exist
+     **/
+    validate_time_of_creation(time_of_creation);
+    validate_times_accessed(times_accessed);
 
-	if (!has_file_repository && !repository->search(title)) {
-		RepositoryException re("RepositoryException: The element cannot be updated because it doesn't exist!\n");
-		throw re;
-	} else if (has_file_repository && !file_repository->search(title)) {
+    if (!has_file_repository && !repository->search(title)) {
         RepositoryException re("RepositoryException: The element cannot be updated because it doesn't exist!\n");
         throw re;
-	}
+    } else if (has_file_repository && !file_repository->search(title)) {
+        RepositoryException re("RepositoryException: The element cannot be updated because it doesn't exist!\n");
+        throw re;
+    }
 
-	if (!has_file_repository)
-	    repository->remove(title);
-    else
+    if (!has_file_repository) {
+        repository->remove(title);
+    } else {
         file_repository->remove(title);
+    }
 
 	Recording recording(title, location, time_of_creation, stoi(times_accessed), footage_preview);
 	if (!has_file_repository)

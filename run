@@ -1,3 +1,4 @@
-g++ -g -o main *.cpp
+g++ -Wall -Werror -g -o main *.cpp
 valgrind --leak-check=full --show-leak-kinds=all  ./main
 rm main
+rm *.in

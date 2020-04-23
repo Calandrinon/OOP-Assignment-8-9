@@ -11,7 +11,7 @@ using namespace std;
 class Repository {
     protected:
         vector<Recording> watch_list;
-        int selected_recording;
+        unsigned int selected_recording;
 
     public:
         virtual void add(Recording r) = 0;
@@ -19,6 +19,7 @@ class Repository {
         virtual vector<Recording> get_watchlist() = 0;
         virtual string next() = 0;
         virtual void save() = 0;
+        virtual ~Repository() {}
 };
 
 
@@ -43,7 +44,7 @@ class FileRepository: public Repository {
     private:
         string filename;
         ofstream out;
-        int number_of_elements;
+        unsigned int number_of_elements;
 
     public:
         FileRepository(string filename);

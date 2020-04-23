@@ -78,7 +78,7 @@ vector<Recording> MemoryRepository::get_watchlist() {
 
 FileRepository::FileRepository(string filename) {
     this->filename = filename;
-    ofstream clear_file(filename);
+    ofstream file_creator(filename);
     selected_recording = 0;
     number_of_elements = 0;
 }
@@ -145,6 +145,8 @@ void FileRepository::add(Recording recording) {
 
     ofstream append_stream(filename, std::ios::app);
     append_stream << recording.get_as_string() << "\n";
+    append_stream.close();
+    in.close();
     number_of_elements++;
 }
 
@@ -212,7 +214,7 @@ string FileRepository::next() {
         selected_recording = 0;
     }
 
-    int counter = 0;
+    unsigned int counter = 0;
     string element;
     ifstream in(filename);
     while (getline(in, element)) {
@@ -221,6 +223,8 @@ string FileRepository::next() {
 
         counter++;
     }
+
+    return "Element not found!";
 }
 
 
@@ -232,7 +236,7 @@ void FileRepository::save() {
 
     string element;
     ifstream in(filename);
-    int counter = 0;
+    unsigned int counter = 0;
 
     while (getline(in, element)) {
         if (counter == selected_recording) {

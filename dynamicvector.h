@@ -23,8 +23,9 @@ class DynamicVector {
         	number_of_elements++;
 
         	T* new_array = new T[number_of_elements+1];
-        	for (int i = 0; i < number_of_elements; i++)
-        		new_array[i] = array[i];
+        	for (int i = 0; i < number_of_elements; i++) {
+                new_array[i] = array[i];
+            }
 
 			delete[] array;
         	array = new_array;

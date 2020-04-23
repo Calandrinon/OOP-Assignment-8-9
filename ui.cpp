@@ -184,10 +184,11 @@ void UI::mylist() {
 void UI::set_file_location() {
     string command_name = this->last_command.substr(0, this->last_command.find(" "));
     string file_path = this->last_command.substr(this->last_command.find(" ")+1, this->last_command.size()-1);
-    //file_path = service->strip(file_path);
+    file_path = service->strip(file_path);
+
+    ofstream some_file_creator(file_path);
 
     service->set_file_repository_filename(file_path);
-    cout << service->get_file_repository_filename() << "\n";
 }
 
 
@@ -230,11 +231,11 @@ void UI::run() {
 
 				try {
 					(this->*func[i])();
-				} catch (CommandFormatException cfe) {
+				} catch (CommandFormatException& cfe) {
 					cout << cfe.message;
-				} catch(invalid_argument ie) {
+				} catch(invalid_argument& ie) {
 					cout << "InvalidArgumentException: stoi can't convert string with letters into an int!\n";
-				} catch(RepositoryException re) {
+				} catch(RepositoryException& re) {
 					cout << re.message;
 				}
 			}

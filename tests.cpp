@@ -38,6 +38,11 @@ Tests::Tests() {
     testRepositorySetFileRepoFilename__setsFilename__success();
     testServiceSetFileRepoFilename__setsFilename__success();
     testRepositoryGetFileRepoFilename__getsFilename__success();
+    testCommandFormatException();
+    testFileRepoExistenceInService();
+    testStrip();
+    testTimeOfCreationValidation__incorrectFormatting__throwsException();
+    testTimeOfCreationValidation__invalidDate__throwsException();
 }
 
 
@@ -81,7 +86,7 @@ void Tests::testRepositoryAdd__duplicateElement__doesntAddElement() {
     Recording recording2("anomaly","deck D sector X1423","01-13-3248",5,"prev123.mp15");
     try {
         repository.add(recording);
-    } catch(RepositoryException re) {
+    } catch(RepositoryException& re) {
 
     }
 
@@ -296,7 +301,7 @@ void Tests::testFileRepository__searchingAnElement__success() {
 
 
 void Tests::testFileRepository__addingAnElement__success() {
-    FileRepository* repository = new FileRepository("test.in");
+    FileRepository* repository = new FileRepository("test1.in");
 
     Recording recording("1", "1", "01-01-2001", 1, "1.mp1");
     repository->add(recording);
@@ -309,7 +314,7 @@ void Tests::testFileRepository__addingAnElement__success() {
 
 
 void Tests::testFileRepository__removingAnElement__success() {
-    FileRepository* repository = new FileRepository("test.in");
+    FileRepository* repository = new FileRepository("test2.in");
 
     Recording recording("1", "1", "01-01-2001", 1, "1.mp1");
     Recording recording2("2", "2", "02-02-2002", 2, "2.mp1");
@@ -326,7 +331,7 @@ void Tests::testFileRepository__removingAnElement__success() {
 
 
 void Tests::testFileRepository__addingADuplicateElement__success() {
-    FileRepository* repository = new FileRepository("test.in");
+    FileRepository* repository = new FileRepository("test3.in");
 
     Recording recording("1", "1", "01-01-2001", 1, "1.mp1");
     Recording recording2("1", "1", "01-01-2001", 1, "1.mp1");
@@ -347,7 +352,7 @@ void Tests::testFileRepository__addingADuplicateElement__success() {
 
 
 void Tests::testFileRepository__searchingAnNonexistentElement__returnsFalse() {
-    FileRepository* repository = new FileRepository("test.in");
+    FileRepository* repository = new FileRepository("test4.in");
 
     assert(repository->search("5") == false);
 
@@ -357,7 +362,7 @@ void Tests::testFileRepository__searchingAnNonexistentElement__returnsFalse() {
 
 
 void Tests::testFileRepository__removingANonexistingElement__fails() {
-    FileRepository* repository = new FileRepository("test.in");
+    FileRepository* repository = new FileRepository("test5.in");
 
     Recording recording("1", "1", "01-01-2001", 1, "1.mp1");
     Recording recording2("2", "2", "02-02-2002", 2, "2.mp1");
@@ -374,7 +379,7 @@ void Tests::testFileRepository__removingANonexistingElement__fails() {
 
 
 void Tests::testFileRepository__getNextElement__success() {
-    FileRepository* repository = new FileRepository("test.in");
+    FileRepository* repository = new FileRepository("test6.in");
 
     Recording recording("1", "1", "01-01-2001", 1, "1.mp1");
     Recording recording2("2", "2", "02-02-2002", 2, "2.mp1");
@@ -392,7 +397,7 @@ void Tests::testFileRepository__getNextElement__success() {
 
 
 void Tests::testFileRepository__saveElement__success() {
-    FileRepository* repository = new FileRepository("test.in");
+    FileRepository* repository = new FileRepository("test7.in");
 
     try {
         repository->save();
@@ -415,9 +420,9 @@ void Tests::testFileRepository__saveElement__success() {
 
 
 void Tests::testFileRepository__getFilename__success() {
-    FileRepository* repository = new FileRepository("test.in");
+    FileRepository* repository = new FileRepository("test8.in");
 
-    assert(repository->get_filename() == "test.in");
+    assert(repository->get_filename() == "test8.in");
 
     delete repository;
     cout << "File repository save operation test passed!\n";
@@ -435,10 +440,10 @@ void Tests::testRepositorySearch__searchingNonexistentElement__fails() {
 
 
 void Tests::testServiceGetFileRepoFilename__getsFilename__success() {
-    FileRepository* repository = new FileRepository("test.in");
+    FileRepository* repository = new FileRepository("test9.in");
     Service* service = new Service(repository);
 
-    assert(service->get_file_repository_filename() == "test.in");
+    assert(service->get_file_repository_filename() == "test9.in");
 
     delete repository;
     delete service;
@@ -447,10 +452,10 @@ void Tests::testServiceGetFileRepoFilename__getsFilename__success() {
 
 
 void Tests::testServiceSetFileRepoFilename__setsFilename__success() {
-    FileRepository* repository = new FileRepository("test.in");
+    FileRepository* repository = new FileRepository("test10.in");
     Service* service = new Service(repository);
 
-    assert(service->get_file_repository_filename() == "test.in");
+    assert(service->get_file_repository_filename() == "test10.in");
     service->set_file_repository_filename("test2.in");
     assert(service->get_file_repository_filename() == "test2.in");
 
@@ -461,10 +466,10 @@ void Tests::testServiceSetFileRepoFilename__setsFilename__success() {
 
 
 void Tests::testRepositorySetFileRepoFilename__setsFilename__success() {
-    FileRepository* repository = new FileRepository("test.in");
+    FileRepository* repository = new FileRepository("test11.in");
 
-    repository->set_filename("test2.in");
-    assert(repository->get_filename() == "test2.in");
+    repository->set_filename("test12.in");
+    assert(repository->get_filename() == "test12.in");
 
     delete repository;
     cout << "FileRepo set filename test passed!\n";
@@ -472,10 +477,60 @@ void Tests::testRepositorySetFileRepoFilename__setsFilename__success() {
 
 
 void Tests::testRepositoryGetFileRepoFilename__getsFilename__success() {
-    FileRepository* repository = new FileRepository("test.in");
+    FileRepository* repository = new FileRepository("test13.in");
 
-    assert(repository->get_filename() == "test.in");
+    assert(repository->get_filename() == "test13.in");
 
     delete repository;
     cout << "FileRepo get filename test passed!\n";
+}
+
+
+void Tests::testCommandFormatException() {
+    try {
+        throw CommandFormatException("Incorrect formatting!\n");
+    } catch (CommandFormatException& exc) {
+
+    }
+}
+
+
+void Tests::testFileRepoExistenceInService() {
+    MemoryRepository repository;
+    Service service(&repository);
+
+    assert(service.does_service_have_file_repository() == false);
+}
+
+
+void Tests::testStrip() {
+    MemoryRepository repository;
+    Service service(&repository);
+    string test_string = "   abc  \n";
+
+    assert(service.strip(test_string) == "abc");
+}
+
+
+void Tests::testTimeOfCreationValidation__incorrectFormatting__throwsException() {
+    MemoryRepository repository;
+    Service service(&repository);
+
+    try {
+        service.add("1", "1", "01-20", "5", "file.mp3");
+    } catch (CommandFormatException& cfe) {
+
+    }
+}
+
+
+void Tests::testTimeOfCreationValidation__invalidDate__throwsException() {
+    MemoryRepository repository;
+    Service service(&repository);
+
+    try {
+        service.add("1", "1", "32-50-2250", "5", "file.mp3");
+    } catch (CommandFormatException& cfe) {
+
+    }
 }
