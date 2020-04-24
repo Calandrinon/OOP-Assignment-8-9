@@ -6,6 +6,7 @@
 #include "myexceptions.h"
 #include <vector>
 #include <algorithm>
+#include "string_functions.h"
 
 using namespace std;
 
@@ -22,7 +23,7 @@ void UI::exit() {
 
 
 vector<string> UI::tokenize(string line, char delimiter) {
-	return service->tokenize(line, delimiter);
+	return StringFunctions::tokenize(line, delimiter);
 }
 
 
@@ -47,7 +48,7 @@ void UI::add() {
 	}
 
 	for (string& token: tokens)
-		token = service->strip(token);
+		token = StringFunctions::strip(token);
 
 	tokens[0].erase(0, 4);  // the title without the 'add' command name
 	service->add(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4]);
@@ -73,7 +74,7 @@ void UI::list() {
 
 	if (tokens.size() == 2) {
 		for (string& token: tokens)
-			token = service->strip(token);
+			token = StringFunctions::strip(token);
 
 		tokens[0].erase(0, 5);
 
@@ -113,7 +114,7 @@ void UI::remove() {
 
 
 void UI::update() {
-	vector<string> tokens = service->tokenize(this->last_command, ',');
+	vector<string> tokens = StringFunctions::tokenize(this->last_command, ',');
 
 	if (tokens.size() != 5) {
 		cout << "The command update takes 5 parameters: add title, new_location, new_timeOfCreation, new_timesAccessed, new_footagePreview\n";
@@ -121,7 +122,7 @@ void UI::update() {
 	}
 
 	for (string& token: tokens)
-		token = service->strip(token);
+		token = StringFunctions::strip(token);
 
 	tokens[0].erase(0, 7);  // the title without the 'add' command name
 
@@ -183,9 +184,9 @@ void UI::mylist() {
 void UI::set_file_location() {
     string command_name = this->last_command.substr(0, this->last_command.find(" "));
     string file_path = this->last_command.substr(this->last_command.find(" ")+1, this->last_command.size()-1);
-    file_path = service->strip(file_path);
+    file_path = StringFunctions::strip(file_path);
 
-    ofstream some_file_creator(file_path);
+    //ofstream some_file_creator(file_path);
 
     service->set_file_repository_filename(file_path);
 }

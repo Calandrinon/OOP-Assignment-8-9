@@ -3,6 +3,7 @@
 #include <cassert>
 #include <string>
 #include <cstring>
+#include "string_functions.h"
 using namespace std;
 
 
@@ -426,7 +427,7 @@ void Tests::testStrip() {
     Service service(&repository);
     string test_string = "   abc  \n";
 
-    assert(service.strip(test_string) == "abc");
+    assert(StringFunctions::strip(test_string) == "abc");
 }
 
 

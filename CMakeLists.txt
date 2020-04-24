@@ -8,7 +8,6 @@ set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE 1)
 include_directories(.)
 
 add_executable(OOP_Assignment_8
-        dynamicvector.h
         main.cpp
         myexceptions.h
         recording.cpp
@@ -20,4 +19,9 @@ add_executable(OOP_Assignment_8
         tests.cpp
         tests.h
         ui.cpp
-        ui.h)
+        ui.h
+        validator.cpp
+        validator.h
+        string_functions.cpp
+        string_functions.h)
+
