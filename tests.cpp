@@ -44,6 +44,10 @@ Tests::Tests() {
     testServiceRemoveWithFileRepo__existentItem__itemRemoved();
     testServiceUpdateWithMemoryRepo__inexistentItem__exceptionThrown();
     testServiceUpdateWithFileRepo__inexistentItem__exceptionThrown();
+    testServiceNext__withMemoryRepo__success();
+    testServiceNext__withFileRepo__success();
+    testServiceSave__withFileRepo__success();
+    testServiceSave__withMemoryRepo__success();
 }
 
 
@@ -527,3 +531,58 @@ void Tests::testServiceUpdateWithFileRepo__inexistentItem__exceptionThrown() {
         assert(true);
     }
 }
+
+
+void Tests::testServiceNext__withMemoryRepo__success() {
+    MemoryRepository repository;
+    Service service(&repository);
+    service.add("1", "1", "01-01-2001", "15", "file.mp4");
+    service.add("2", "2", "01-01-2001", "16", "file2.mp4");
+
+    assert(service.next() == "2, 2, 01-01-2001, 16, file2.mp4");
+}
+
+
+void Tests::testServiceNext__withFileRepo__success() {
+    FileRepository repository("test18.txt");
+    Service service(&repository);
+
+    service.add("1", "1", "01-01-2001", "15", "file.mp4");
+    service.add("2", "2", "01-01-2001", "16", "file2.mp4");
+
+    assert(service.next() == "2, 2, 01-01-2001, 16, file2.mp4");
+}
+
+
+void Tests::testServiceSave__withFileRepo__success() {
+    FileRepository repository("test18.txt");
+    Service service(&repository);
+
+    service.add("1", "1", "01-01-2001", "15", "file.mp4");
+    service.add("2", "2", "01-01-2001", "16", "file2.mp4");
+    service.save();
+    service.save();
+    service.save();
+
+    vector<Recording> container = service.get_watchlist();
+
+    assert(container.size() == 3);
+}
+
+
+void Tests::testServiceSave__withMemoryRepo__success() {
+    MemoryRepository repository;
+    Service service(&repository);
+
+    service.add("1", "1", "01-01-2001", "15", "file.mp4");
+    service.add("2", "2", "01-01-2001", "16", "file2.mp4");
+    service.save();
+    service.save();
+    service.save();
+
+    vector<Recording> container = service.get_watchlist();
+
+    assert(container.size() == 3);
+}
+
+

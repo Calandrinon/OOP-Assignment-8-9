@@ -44,6 +44,10 @@ class Tests {
         void testServiceRemoveWithFileRepo__existentItem__itemRemoved();
         void testServiceUpdateWithMemoryRepo__inexistentItem__exceptionThrown();
         void testServiceUpdateWithFileRepo__inexistentItem__exceptionThrown();
+        void testServiceNext__withMemoryRepo__success();
+        void testServiceNext__withFileRepo__success();
+        void testServiceSave__withFileRepo__success();
+        void testServiceSave__withMemoryRepo__success();
 };
 
 #endif
