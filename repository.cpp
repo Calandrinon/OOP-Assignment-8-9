@@ -131,6 +131,12 @@ std::string FileRepository::strip(std::string str) {
 }
 
 
+ostream& operator<<(ostream& out, Recording& recording) {
+    out << recording.get_as_string() << "\n";
+    return out;
+}
+
+
 void FileRepository::add(Recording recording) {
     ifstream in(filename);
     string element;
@@ -144,7 +150,7 @@ void FileRepository::add(Recording recording) {
     }
 
     ofstream append_stream(filename, std::ios::app);
-    append_stream << recording.get_as_string() << "\n";
+    append_stream << recording;
     append_stream.close();
     in.close();
     number_of_elements++;

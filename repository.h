@@ -59,5 +59,8 @@ class FileRepository: public Repository {
         vector<string> tokenize(string line, char delimiter);
         std::string strip(std::string str);
         int get_number_of_elements();
+
+        friend ostream& operator<<(ostream& out, Recording& recording);
+
         ~FileRepository();
 };
