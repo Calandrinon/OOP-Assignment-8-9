@@ -22,13 +22,8 @@ void UI::exit() {
 }
 
 
-vector<string> UI::tokenize(string line, char delimiter) {
-	return StringFunctions::tokenize(line, delimiter);
-}
-
-
 string UI::get_command_name(string full_command) {
-	vector<string> tokens = tokenize(full_command, ' ');
+	vector<string> tokens = StringFunctions::tokenize(full_command, ' ');
 
 	if (tokens.size() == 0) {
 		return "-1";
@@ -40,7 +35,7 @@ string UI::get_command_name(string full_command) {
 
 
 void UI::add() {
-	vector<string> tokens = tokenize(this->last_command, ',');
+	vector<string> tokens = StringFunctions::tokenize(this->last_command, ',');
 
 	if (tokens.size() != 5) {
 		cout << "The command add takes 5 parameters: add title, location, timeOfCreation, timesAccessed, footagePreview\n";
@@ -68,7 +63,7 @@ void UI::list() {
     }
 
 	vector<Recording> container = service->get_repository_container();
-	vector<string> tokens = tokenize(this->last_command, ',');
+	vector<string> tokens = StringFunctions::tokenize(this->last_command, ',');
 	string location;
 	int times_accessed;
 
@@ -101,7 +96,7 @@ void UI::list() {
 
 
 void UI::remove() {
-	vector<string> tokens = tokenize(this->last_command, ' ');
+	vector<string> tokens = StringFunctions::tokenize(this->last_command, ' ');
 
 	if (!service->search(tokens[1])) {
 		cout << "The element doesn't exist!\n";
@@ -136,7 +131,7 @@ void UI::update() {
 
 
 void UI::change_mode() {
-	vector<string> tokens = tokenize(this->last_command, ' ');
+	vector<string> tokens = StringFunctions::tokenize(this->last_command, ' ');
 
 	if (tokens.size() != 2 || tokens[1].size() > 1 || !(tokens[1][0] == 'A' || tokens[1][0] == 'B')) {
 		cout << "The command mode takes only one parameter with the values A or B!\n";
