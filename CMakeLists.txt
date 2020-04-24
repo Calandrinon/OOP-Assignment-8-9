@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(OOP_Assignment_8)
 
 set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_FLAGS "-g -O0 -Wall -fprofile-arcs -ftest-coverage")
+set(CMAKE_CXX_FLAGS "-g -O0 -Wall -Werror -fprofile-arcs -ftest-coverage")
 set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE 1)
 
 include_directories(.)
