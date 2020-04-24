@@ -213,15 +213,15 @@ int FileRepository::get_number_of_elements() {
 
 
 string FileRepository::next() {
-    if (selected_recording + 1 < number_of_elements) {
-        selected_recording++;
-    } else {
+    selected_recording++;
+    if (selected_recording >= number_of_elements) {
         selected_recording = 0;
     }
 
     unsigned int counter = 0;
     string element;
     ifstream in(filename);
+
     while (getline(in, element)) {
         if (counter == selected_recording)
             return element;
@@ -252,6 +252,7 @@ void FileRepository::save() {
             watch_list.push_back(recording);
             return;
         }
+        counter++;
     }
 }
 

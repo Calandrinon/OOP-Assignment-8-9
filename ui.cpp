@@ -199,17 +199,6 @@ void UI::run() {
 	int number_of_commands = sizeof(commands)/sizeof(commands[0]);
 	string command;
 
-	service->add("anomaly", "deck D sector x1423", "01-10-2000", "5", "prev123.mp4");
-	service->add("anomaly4", "deck D sector x1423", "01-10-2000", "12", "prev654.mp4");
-	service->add("anomaly2", "deck E sector x20", "01-10-2000", "2", "prev124.mp4");
-	service->add("anomaly3", "deck F sector x1422", "02-10-2000", "3", "prev125.mp4");
-	service->add("1", "deck D sector x1423", "01-10-2000", "5", "prev1.mp4");
-	service->add("4", "deck D sector x1423", "01-10-2000", "12", "prev4.mp4");
-	service->add("3", "deck E sector x20", "01-10-2000", "2", "prev3.mp4");
-	service->add("17", "deck F sector x1422", "02-10-2000", "3", "prev17.mp4");
-	service->add("13", "deck D sector x1423", "01-10-2000", "12", "prev13.mp4");
-	service->add("20", "deck E sector x20", "01-10-2000", "2", "prev20.mp4");
-	service->add("5", "deck F sector x1422", "02-10-2000", "3", "prev5.mp4");
 	help();
 
 	while (running) {
