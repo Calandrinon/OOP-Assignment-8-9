@@ -4,7 +4,6 @@
 #include <string>
 #include <exception>
 #include "myexceptions.h"
-//#include "dynamicvector.h"
 #include <vector>
 #include <algorithm>
 

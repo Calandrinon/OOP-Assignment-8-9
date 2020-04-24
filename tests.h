@@ -1,16 +1,12 @@
 #ifndef __TESTS_H__
 #define __TESTS_H__
-#include "dynamicvector.h"
 #include "repository.h"
 #include "service.h"
+#include "myexceptions.h"
 
 class Tests {
 	public:
 		Tests();
-		void test_dynamic_vector_creation();
-		void test_dynamic_vector_push_back();
-		void test_dynamic_vector_get_element_from_index();
-		void test_dynamic_vector_deletion();
 		void test_recording_getters();
 		void test_recording_setters();
 		void test_repository_add();
@@ -19,8 +15,6 @@ class Tests {
 		void test_service_delete();
 		void test_repository_search();
 		void test_service_update();
-		void test_dynamic_vector_assignment_operator();
-		void test_dynamic_vector_overloaded_subscript();
         void testRepositoryAdd__duplicateElement__doesntAddElement();
         void testRepositorySearch__searchingNonexistentElement__fails();
         void testRepositoryNext__averageCase__incrementsToNextElement();
@@ -43,6 +37,13 @@ class Tests {
         void testStrip();
         void testTimeOfCreationValidation__incorrectFormatting__throwsException();
         void testTimeOfCreationValidation__invalidDate__throwsException();
+        void testServiceGetMemoryRepositoryContainer__serviceHasFileRepo__failure();
+        void testServiceGetFileRepoFilename__serviceHasNoFileRepo__success();
+        void testServiceSearchWithMemoryRepo__existentItem__success();
+        void testServiceSearchWithFileRepo__existentItem__success();
+        void testServiceRemoveWithFileRepo__existentItem__itemRemoved();
+        void testServiceUpdateWithMemoryRepo__inexistentItem__exceptionThrown();
+        void testServiceUpdateWithFileRepo__inexistentItem__exceptionThrown();
 };
 
 #endif

@@ -2,7 +2,6 @@
 #include <sstream>
 #include "myexceptions.h"
 #include "recording.h"
-#include "dynamicvector.h"
 using namespace std;
 
 Service::Service(Repository* repository) {

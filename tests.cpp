@@ -7,10 +7,6 @@ using namespace std;
 
 
 Tests::Tests() {
-	test_dynamic_vector_creation();
-	test_dynamic_vector_get_element_from_index();
-	test_dynamic_vector_push_back();
-	test_dynamic_vector_deletion();
 	test_recording_getters();
 	test_recording_setters();
 	test_repository_add();
@@ -19,8 +15,6 @@ Tests::Tests() {
 	test_service_delete();
 	test_repository_search();
 	test_service_update();
-	test_dynamic_vector_assignment_operator();
-	test_dynamic_vector_overloaded_subscript();
     testRepositoryAdd__duplicateElement__doesntAddElement();
     testRepositoryNext__averageCase__incrementsToNextElement();
     testRepositorySave__averageCase__elementAddedToWatchlist();
@@ -43,6 +37,13 @@ Tests::Tests() {
     testStrip();
     testTimeOfCreationValidation__incorrectFormatting__throwsException();
     testTimeOfCreationValidation__invalidDate__throwsException();
+    testServiceGetMemoryRepositoryContainer__serviceHasFileRepo__failure();
+    testServiceGetFileRepoFilename__serviceHasNoFileRepo__success();
+    testServiceSearchWithMemoryRepo__existentItem__success();
+    testServiceSearchWithFileRepo__existentItem__success();
+    testServiceRemoveWithFileRepo__existentItem__itemRemoved();
+    testServiceUpdateWithMemoryRepo__inexistentItem__exceptionThrown();
+    testServiceUpdateWithFileRepo__inexistentItem__exceptionThrown();
 }
 
 
@@ -97,65 +98,6 @@ void Tests::testRepositoryAdd__duplicateElement__doesntAddElement() {
 }
 
 
-void Tests::test_dynamic_vector_creation() {
-	DynamicVector<char> vector;
-
-	std::cout << "Dynamic vector creation test passed!\n";
-	vector.free();
-}
-
-
-void Tests::test_dynamic_vector_get_element_from_index() {
-	DynamicVector<int> vector;
-	
-	vector.push_back(5);
-	vector.push_back(24);
-	vector.push_back(187);
-	vector.push_back(876);
-	
-	assert(vector.element(0) == 5);
-	assert(vector.element(1) == 24);
-	assert(vector.element(2) == 187);
-	assert(vector.element(3) == 876);
-
-	assert(vector.element(4) == vector[0]);
-
-	std::cout << "Dynamic vector element extraction test passed!\n";
-	vector.free();
-}
-
-
-void Tests::test_dynamic_vector_push_back() {
-	DynamicVector<const char*> vector;
-	
-	vector.push_back("abc");
-	vector.push_back("def");
-	vector.push_back("zzz");	
-
-	assert(strcmp(vector.element(1), "def") == 0);
-	assert(vector.size() == 3);
-
-	std::cout << "Dynamic vector push_back method test passed!\n";
-	vector.free();
-}
-
-
-void Tests::test_dynamic_vector_deletion() {
-	DynamicVector<int> vector;
-	
-	vector.push_back(5);
-	vector.push_back(24);
-	vector.push_back(777);
-	vector.push_back(555);
-	vector.push_back(333);
-	vector.push_back(111);
-	vector.remove(1,4);
-
-	assert(vector.size() == 2);
-
-	std::cout << "Dynamic vector element deletion test passed!\n";
-	vector.free();
-}
 
 
 void Tests::test_recording_getters() {
@@ -256,34 +198,6 @@ void Tests::test_service_update() {
 	vector<Recording> container = repository.get_container();
 	assert(container[0].get_footage_preview() == "abc.mp4");
 	cout << "Service update operation test passed!\n";
-}
-
-
-void Tests::test_dynamic_vector_assignment_operator() {
-	DynamicVector<int> vector;
-	vector.push_back(5);
-	vector.push_back(2);
-	assert(vector.size() == 2);
-	
-	DynamicVector<int> vector2;
-	vector2 = vector;
-	assert(vector2.size() == 2);
-	assert(vector2.element(0) == vector.element(0));
-	assert(vector2.element(1) == vector.element(1));
-	vector.free();
-	vector2.free();
-	cout << "Dynamic vector assignment operator test passed!\n";
-}
-
-
-void Tests::test_dynamic_vector_overloaded_subscript() {
-	DynamicVector<int> vector;
-	vector.push_back(17);
-
-	assert(vector[0] == 17);
-	vector.free();
-
-	cout << "Dynamic vector overloaded subscript test passed!\n";
 }
 
 
@@ -532,5 +446,84 @@ void Tests::testTimeOfCreationValidation__invalidDate__throwsException() {
         service.add("1", "1", "32-50-2250", "5", "file.mp3");
     } catch (CommandFormatException& cfe) {
 
+    }
+}
+
+
+void Tests::testServiceGetMemoryRepositoryContainer__serviceHasFileRepo__failure() {
+    FileRepository repository("test16.txt");
+    Service service(&repository);
+
+    service.add("1", "1", "01-01-2001", "15", "file.mp4");
+    vector<Recording> my_container = service.get_repository_container();
+
+    assert(my_container.size() == 0);
+}
+
+
+void Tests::testServiceGetFileRepoFilename__serviceHasNoFileRepo__success() {
+    MemoryRepository repository;
+    Service service(&repository);
+
+    service.add("1", "1", "01-01-2001", "15", "file.mp4");
+    vector<Recording> my_container = service.get_repository_container();
+
+    assert(my_container.size() == 1);
+}
+
+
+void Tests::testServiceSearchWithMemoryRepo__existentItem__success() {
+    MemoryRepository repository;
+    Service service(&repository);
+
+    service.add("1", "1", "01-01-2001", "15", "file.mp4");
+
+    assert(service.search("1") == true);
+}
+
+
+void Tests::testServiceSearchWithFileRepo__existentItem__success() {
+    FileRepository repository("test17.txt");
+    Service service(&repository);
+
+    service.add("1", "1", "01-01-2001", "15", "file.mp4");
+
+    assert(service.search("1") == true);
+}
+
+
+void Tests::testServiceRemoveWithFileRepo__existentItem__itemRemoved() {
+    FileRepository repository("test17.txt");
+    Service service(&repository);
+
+    service.add("1", "1", "01-01-2001", "15", "file.mp4");
+    service.remove("1");
+
+    ifstream in(repository.get_filename());
+    assert(in.peek() == std::ifstream::traits_type::eof());
+}
+
+
+void Tests::testServiceUpdateWithMemoryRepo__inexistentItem__exceptionThrown() {
+    MemoryRepository repository;
+    Service service(&repository);
+    try {
+        service.update("1", "1", "01-01-2001", "15", "file.mp4");
+        assert(false);
+    } catch (...) {
+        assert(true);
+    }
+}
+
+
+void Tests::testServiceUpdateWithFileRepo__inexistentItem__exceptionThrown() {
+    FileRepository repository("test18.txt");
+    Service service(&repository);
+
+    try {
+        service.update("1", "1", "01-01-2001", "15", "file.mp4");
+        assert(false);
+    } catch (...) {
+        assert(true);
     }
 }
