@@ -163,6 +163,8 @@ void Service::set_watchlist_filename(string file_path) {
     file_repository->set_watchlist_filename(file_path);
 
     if (file_path.find(".html") != std::string::npos) {
-        file_repository->update_watchlist_file();
+        file_repository->update_watchlist_html_file();
+    } else {
+        file_repository->update_watchlist_csv_file();
     }
 }

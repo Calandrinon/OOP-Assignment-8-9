@@ -253,9 +253,9 @@ void FileRepository::save() {
             watch_list.push_back(recording);
 
             if (watchlist_filename.find(".html") != std::string::npos) {
-                update_watchlist_file();
+                update_watchlist_html_file();
             } else {
-
+                update_watchlist_csv_file();
             }
 
             return;
@@ -291,7 +291,7 @@ void FileRepository::set_watchlist_filename(string new_filename) {
 }
 
 
-void FileRepository::update_watchlist_file() {
+void FileRepository::update_watchlist_html_file() {
     ofstream file_creator(watchlist_filename);
     vector<string> filename_tokens = StringFunctions::tokenize(watchlist_filename, '.');
 
@@ -333,4 +333,13 @@ void FileRepository::update_watchlist_file() {
     file_creator << "\t\t</table>\n";
     file_creator << "\t</body>\n";
     file_creator << "</html>";
+}
+
+
+void FileRepository::update_watchlist_csv_file() {
+    ofstream file_creator(watchlist_filename);
+
+    for (auto element: watch_list) {
+        file_creator << element;
+    }
 }
