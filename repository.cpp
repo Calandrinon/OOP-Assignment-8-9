@@ -271,7 +271,6 @@ vector<Recording> FileRepository::get_watchlist() {
 
 
 FileRepository::~FileRepository() {
-    out.close();
 }
 
 

@@ -42,7 +42,6 @@ class MemoryRepository: public Repository {
 class FileRepository: public Repository {
     private:
         string filename, watchlist_filename;
-        ofstream out;
         unsigned int number_of_elements;
 
     public:
