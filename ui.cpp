@@ -150,9 +150,8 @@ void UI::help() {
     " - delete title (eg. delete anomaly)\n"
     " - list\n"
 	" - help\n"
-	" - next - When the user selects this option by selecting next, the data of the first selected recording is displayed and the preview is played back on a holo-screen, at any given security terminal."
-	" - save - Saves the currently selected recording"
-	" - list location, timesAccessed -> Displays the recordings for a given location having the number of times accessed smaller than the second given amount."
+	" - next - When the user selects this option, the data of the first selected recording is displayed and the preview is played back on a holo-screen, at any given security terminal.\n"
+	" - save - Saves the currently selected recording\n"
 	" - mylist - displays the playlist of recordings.\n"
     " - exit\n\n";
 }

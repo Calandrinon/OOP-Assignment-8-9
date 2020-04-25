@@ -49,6 +49,9 @@ Tests::Tests() {
     testServiceNext__withFileRepo__success();
     testServiceSave__withFileRepo__success();
     testServiceSave__withMemoryRepo__success();
+    test_getter_and_setter_for_watchlist_filename();
+    test_update_watchlist_html_file();
+    testServiceUpdateWithFileRepo__existentItem__updatedItem();
 }
 
 
@@ -586,4 +589,45 @@ void Tests::testServiceSave__withMemoryRepo__success() {
     assert(container.size() == 3);
 }
 
+
+void Tests::test_getter_and_setter_for_watchlist_filename() {
+    FileRepository repository("test19.txt");
+    Service service(&repository);
+
+    service.set_watchlist_filename("test_watchlist.csv");
+    assert(repository.get_watchlist_filename() == "test_watchlist.csv");
+}
+
+
+void Tests::test_update_watchlist_html_file() {
+    FileRepository repository("test20.txt");
+    Service service(&repository);
+
+    service.set_watchlist_filename("test_watchlist2.html");
+
+    service.add("1", "1", "01-01-2001", "1", "test.mp1");
+    service.add("2", "2", "02-02-2002", "2", "test2.mp2");
+
+    service.next();
+    service.save();
+
+    vector<Recording> watchlist = repository.get_watchlist();
+
+    assert(watchlist[0].get_as_string() == "2, 2, 02-02-2002, 2, test2.mp2");
+}
+
+
+void Tests::testServiceUpdateWithFileRepo__existentItem__updatedItem() {
+    FileRepository repository("test20.txt");
+    Service service(&repository);
+
+    service.add("1", "1", "01-01-2001", "1", "test.mp1");
+    service.update("1", "a", "01-01-2001", "1", "test2.mp1");
+
+    ifstream in(repository.get_filename());
+    string updated_element;
+    getline(in, updated_element);
+
+    assert(updated_element == "1, a, 01-01-2001, 1, test2.mp1");
+}
 

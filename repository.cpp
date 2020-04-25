@@ -295,22 +295,9 @@ void FileRepository::update_watchlist_html_file() {
     ofstream file_creator(watchlist_filename);
     vector<string> filename_tokens = StringFunctions::tokenize(watchlist_filename, '.');
 
-    int position_of_slash_before_filename = 0;
-    for (int i = filename_tokens[0].size() - 1; i >= 0; i--) {
-        if (filename_tokens[0][i] == '/' || filename_tokens[0][i] == '\\') {
-            position_of_slash_before_filename = i;
-            break;
-        }
-    }
-
-    string actual_filename = "";
-    for (unsigned int i = position_of_slash_before_filename + 1; i < filename_tokens[0].size(); i++) {
-        actual_filename += filename_tokens[0][i];
-    }
-
     file_creator << "<!DOCTYPE html>\n";
     file_creator << "<html>\n";
-    file_creator << "\t<head><title>" << actual_filename << "</title></head>\n";
+    file_creator << "\t<head><title>" << filename_tokens[0] << "</title></head>\n";
     file_creator << "\t<body>\n\t\t<table border=\"1\">\n";
     file_creator << "\t\t<tr>\n";
     file_creator << "\t\t\t<td>Title</td>\n";

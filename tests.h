@@ -44,10 +44,13 @@ class Tests {
         void testServiceRemoveWithFileRepo__existentItem__itemRemoved();
         void testServiceUpdateWithMemoryRepo__inexistentItem__exceptionThrown();
         void testServiceUpdateWithFileRepo__inexistentItem__exceptionThrown();
+        void testServiceUpdateWithFileRepo__existentItem__updatedItem();
         void testServiceNext__withMemoryRepo__success();
         void testServiceNext__withFileRepo__success();
         void testServiceSave__withFileRepo__success();
         void testServiceSave__withMemoryRepo__success();
+        void test_getter_and_setter_for_watchlist_filename();
+        void test_update_watchlist_html_file();
 };
 
 #endif
