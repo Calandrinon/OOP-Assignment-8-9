@@ -1,5 +1,6 @@
 #include "repository.h"
 #include "myexceptions.h"
+#include "string_functions.h"
 #include <string>
 
 MemoryRepository::MemoryRepository() {
@@ -250,6 +251,13 @@ void FileRepository::save() {
             int times_accessed = stoi(tokens[3]);
             Recording recording(tokens[0], tokens[1], tokens[2], times_accessed, tokens[4]);
             watch_list.push_back(recording);
+
+            if (watchlist_filename.find(".html") != std::string::npos) {
+                update_watchlist_file();
+            } else {
+
+            }
+
             return;
         }
         counter++;
@@ -270,4 +278,59 @@ FileRepository::~FileRepository() {
 void FileRepository::set_filename(string new_filename) {
     this->filename = new_filename;
     ofstream file_creator(new_filename);
+}
+
+
+string FileRepository::get_watchlist_filename() {
+    return watchlist_filename;
+}
+
+
+void FileRepository::set_watchlist_filename(string new_filename) {
+    watchlist_filename = new_filename;
+}
+
+
+void FileRepository::update_watchlist_file() {
+    ofstream file_creator(watchlist_filename);
+    vector<string> filename_tokens = StringFunctions::tokenize(watchlist_filename, '.');
+
+    int position_of_slash_before_filename = 0;
+    for (int i = filename_tokens[0].size() - 1; i >= 0; i--) {
+        if (filename_tokens[0][i] == '/' || filename_tokens[0][i] == '\\') {
+            position_of_slash_before_filename = i;
+            break;
+        }
+    }
+
+    string actual_filename = "";
+    for (unsigned int i = position_of_slash_before_filename + 1; i < filename_tokens[0].size(); i++) {
+        actual_filename += filename_tokens[0][i];
+    }
+
+    file_creator << "<!DOCTYPE html>\n";
+    file_creator << "<html>\n";
+    file_creator << "\t<head><title>" << actual_filename << "</title></head>\n";
+    file_creator << "\t<body>\n\t\t<table border=\"1\">\n";
+    file_creator << "\t\t<tr>\n";
+    file_creator << "\t\t\t<td>Title</td>\n";
+    file_creator << "\t\t\t<td>Location</td>\n";
+    file_creator << "\t\t\t<td>Time of creation</td>\n";
+    file_creator << "\t\t\t<td>Times accessed</td>\n";
+    file_creator << "\t\t\t<td>Footage preview</td>\n";
+    file_creator << "\t\t</tr>\n";
+
+    for (auto element: watch_list) {
+        file_creator << "\t\t<tr>\n";
+        file_creator << "\t\t\t<td>" << element.get_title() << "</td>\n";
+        file_creator << "\t\t\t<td>" << element.get_location() << "</td>\n";
+        file_creator << "\t\t\t<td>" << element.get_time_of_creation() << "</td>\n";
+        file_creator << "\t\t\t<td>" << element.get_times_accessed() << "</td>\n";
+        file_creator << "\t\t\t<td>" << element.get_footage_preview() << "</td>\n";
+        file_creator << "\t\t</tr>\n";
+    }
+
+    file_creator << "\t\t</table>\n";
+    file_creator << "\t</body>\n";
+    file_creator << "</html>";
 }

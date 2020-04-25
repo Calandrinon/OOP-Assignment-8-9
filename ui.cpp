@@ -180,17 +180,22 @@ void UI::set_file_location() {
     string command_name = this->last_command.substr(0, this->last_command.find(" "));
     string file_path = this->last_command.substr(this->last_command.find(" ")+1, this->last_command.size()-1);
     file_path = StringFunctions::strip(file_path);
-
-    //ofstream some_file_creator(file_path);
-
     service->set_file_repository_filename(file_path);
 }
 
 
+void UI::set_mylist_file_location() {
+    string command_name = this->last_command.substr(0, this->last_command.find(" "));
+    string file_path = this->last_command.substr(this->last_command.find(" ")+1, this->last_command.size()-1);
+    file_path = StringFunctions::strip(file_path);
+    service->set_watchlist_filename(file_path);
+}
+
+
 void UI::run() {
-	string commands[] = {"exit", "add", "list", "delete", "update", "mode", "help", "next", "save", "mylist", "fileLocation"};
-	string permissions[] = {"all", "admin", "all", "admin", "admin", "admin", "all", "all", "all", "all", "admin"};
-	void (UI::*func[])() = {&UI::exit, &UI::add, &UI::list, &UI::remove, &UI::update, &UI::change_mode, &UI::help, &UI::next, &UI::save, &UI::mylist, &UI::set_file_location};
+	string commands[] = {"exit", "add", "list", "delete", "update", "mode", "help", "next", "save", "mylist", "fileLocation", "mylistLocation"};
+	string permissions[] = {"all", "admin", "all", "admin", "admin", "admin", "all", "all", "all", "all", "admin", "all"};
+	void (UI::*func[])() = {&UI::exit, &UI::add, &UI::list, &UI::remove, &UI::update, &UI::change_mode, &UI::help, &UI::next, &UI::save, &UI::mylist, &UI::set_file_location, &UI::set_mylist_file_location};
 	int number_of_commands = sizeof(commands)/sizeof(commands[0]);
 	string command;
 

@@ -41,7 +41,7 @@ class MemoryRepository: public Repository {
 
 class FileRepository: public Repository {
     private:
-        string filename;
+        string filename, watchlist_filename;
         ofstream out;
         unsigned int number_of_elements;
 
@@ -55,9 +55,12 @@ class FileRepository: public Repository {
         bool search(string title);
         string get_filename();
         void set_filename(string new_filename);
+        string get_watchlist_filename();
+        void set_watchlist_filename(string new_filename);
         vector<string> tokenize(string line, char delimiter);
         std::string strip(std::string str);
         int get_number_of_elements();
+        void update_watchlist_file();
 
         friend ostream& operator<<(ostream& out, Recording& recording);
 

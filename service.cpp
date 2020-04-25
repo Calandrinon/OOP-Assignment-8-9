@@ -157,3 +157,12 @@ Service::~Service() {
 void Service::set_file_repository_filename(string new_filename) {
     file_repository->set_filename(new_filename);
 }
+
+
+void Service::set_watchlist_filename(string file_path) {
+    file_repository->set_watchlist_filename(file_path);
+
+    if (file_path.find(".html") != std::string::npos) {
+        file_repository->update_watchlist_file();
+    }
+}

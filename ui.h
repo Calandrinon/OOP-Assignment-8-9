@@ -24,4 +24,5 @@ class UI {
 		void mylist();
 		void set_file_location();
 		std::string get_command_name(std::string full_command);
+		void set_mylist_file_location();
 };
