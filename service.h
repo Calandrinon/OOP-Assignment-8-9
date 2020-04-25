@@ -10,7 +10,6 @@ class Service {
 	private:
 		MemoryRepository* repository;
 		FileRepository* file_repository;
-		MemoryRepository* watch_list;
 		Validator validator;
 		bool has_file_repository;
 

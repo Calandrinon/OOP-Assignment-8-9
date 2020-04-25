@@ -15,7 +15,6 @@ Service::Service(Repository* repository) {
         this->has_file_repository = true;
     }
 
-	this->watch_list = new MemoryRepository();
 }
 
 
@@ -150,7 +149,6 @@ vector<Recording> Service::get_watchlist() {
 
 
 Service::~Service() {
-	delete watch_list;
 }
 
 
