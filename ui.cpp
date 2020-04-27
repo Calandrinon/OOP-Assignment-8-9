@@ -153,6 +153,8 @@ void UI::help() {
 	" - next - When the user selects this option, the data of the first selected recording is displayed and the preview is played back on a holo-screen, at any given security terminal.\n"
 	" - save - Saves the currently selected recording\n"
 	" - mylist - displays the playlist of recordings.\n"
+	" - fileLocation fullPath (e.g. fileLocation c:\\some really long\\path\\with spaces\\myFileName.txt)\n"
+	" - mylistLocation fullPath (e.g. mylistLocation c:\\some really long\\path\\with spaces\\myFileName.XXX)\n"
     " - exit\n\n";
 }
 
